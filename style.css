@@ -1,0 +1,158 @@
+/*
+Theme Name: Nathalie_Mota
+Theme URI: http://www.monsite.com/nathalie-mota
+Author: Nouairia Dounia
+Author URI: http://www.monsite.com
+Description: Thème pour le site motaphoto, un site dédié à la photographie.
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Requires at least: 5.0
+Tested up to: 6.0
+Text Domain: nathalie-mota
+Tags: photographie, portfolio, responsive
+*/
+
+/* ****FONTS**** */
+@font-face {
+  font-family: "Space Mono";
+  font-style: italic;
+  font-weight: 700;
+  src: url("assets/fonts/SpaceMono-BoldItalic.woff2") format("woff2"),
+    url("assets/fonts/SpaceMono-BoldItalic.woff2") format("woff");
+}
+
+@font-face {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700; 
+    src: url('assets/fonts/SpaceMono-Bold.woff2') format('woff2'),
+         url('assets/fonts/SpaceMono-Bold.woff') format('woff');
+}
+
+@font-face {
+  font-family: "Space Mono";
+  font-style: italic;
+  font-weight: 400;
+  src: url("assets/fonts/SpaceMono-Italic.woff2") format("woff2"),
+    url("assets/fonts/SpaceMono-Italic.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  src: url("assets/fonts/SpaceMono-Regular.woff2") format("woff2"),
+    url("assets/fonts/SpaceMono-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 300;
+  src: url("assets/fonts/Poppins-Light.woff2") format("woff2"),
+    url("assets/fonts/Poppins-Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  src: url("assets/fonts/Poppins-Medium.woff2") format("woff2"),
+    url("assets/fonts/Poppins-Medium.woff") format("woff");
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+  gap: 20%;
+  padding: 28px;
+}
+.header-nav-item, .footer-nav-item {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: black;
+  padding: 25px;
+  text-decoration: none;
+}
+.header-nav-item:hover, .footer-nav-item:hover {
+    font-family: 'Space Mono';
+    font-style: normal;
+    font-weight: 700; 
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: center;
+}
+
+
+/* Modal*/
+.contact-modal {
+  display: none; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); 
+  justify-content: center; 
+  align-items: center; 
+  z-index: 1000; 
+  
+}
+
+.modal-content {
+  background: white;
+  max-width: 40%;
+  height: 98%;
+  position: relative;
+  border: solid black 5px;
+
+}
+
+.modal-header img {
+  width: 100%;
+  height: auto;
+}
+
+.modal-body {
+  display: flex;
+  justify-content: center;
+  padding-left: 11%;
+}
+
+label {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 500;
+  color: #313144;
+  font-size: 12px;
+}
+
+input.wpcf7-form-control.wpcf7-text.wpcf7-validates-as-required {
+  border: solid 1px #B8BBC2;
+  border-radius: 8px;
+  padding: 10px;
+  width: 75%;
+}
+
+textarea.wpcf7-form-control.wpcf7-textarea {
+  border: solid 1px #B8BBC2;
+  border-radius: 8px;
+  width: 80%;
+}
+
+.hero_img {
+  width: 100%;
+}
+
+.hero_overlay{
+  position: absolute;
+    top: 0;
+    left: 0;
+    color: #fff;
+    text-align: center;
+}
