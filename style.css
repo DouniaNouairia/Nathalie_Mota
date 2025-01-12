@@ -121,38 +121,172 @@ Tags: photographie, portfolio, responsive
 .modal-body {
   display: flex;
   justify-content: center;
-  padding-left: 11%;
 }
 
 label {
   font-family: Poppins;
-  font-style: normal;
   font-weight: 500;
-  color: #313144;
   font-size: 12px;
+}
+
+p {
+  display: flex;
+  flex-direction: column;
 }
 
 input.wpcf7-form-control.wpcf7-text.wpcf7-validates-as-required {
   border: solid 1px #B8BBC2;
   border-radius: 8px;
   padding: 10px;
-  width: 75%;
 }
 
 textarea.wpcf7-form-control.wpcf7-textarea {
   border: solid 1px #B8BBC2;
   border-radius: 8px;
-  width: 80%;
 }
 
-.hero_img {
+input.wpcf7-form-control.wpcf7-submit.has-spinner {
+  font-family: Space Mono;
+  font-weight: 400;
+}
+
+input.wpcf7-form-control.wpcf7-submit.has-spinner {
+  font-family: Space Mono;
+  font-weight: 400;
+  border: none;
+  border-radius: 5px;
+  background-color: #D8D8D8;
+  padding: 13px 120px;
+}
+/* ****Hero**** */
+.hero {
+  position: relative;
   width: 100%;
+  height: 100vh; 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.hero_overlay{
-  position: absolute;
-    top: 0;
-    left: 0;
-    color: #fff;
-    text-align: center;
+.hero-content {
+  z-index: 2; 
 }
+
+h1 {
+  font-size: 85px;
+  font-family: 'Space Mono';
+  font-style: italic;
+  font-weight: 700; 
+  color: transparent;
+  -webkit-text-stroke: 2px white;
+}
+
+
+/* ***Gallerie*** */
+
+
+/* .photo-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  padding: 40px 60px;
+}
+
+.photo-item {
+  width: 400px; 
+  height: 350px; 
+  overflow: hidden; 
+  position: relative; 
+ 
+}
+
+.photo-thumbnail {
+  width: 100%; 
+  height: 100%;
+}
+
+.photo-thumbnail img {
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  display: block; 
+  
+} */
+.photo-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  padding: 40px 60px;
+}
+
+.photo-item {
+  width: 400px;
+  height: 350px;
+  overflow: hidden;
+  position: relative;
+ 
+}
+
+.photo-thumbnail {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease; 
+}
+
+
+/* Filtres */
+.filters-container {
+  max-width: 1126px;  /* Largeur maximale - Section Filtres */
+  margin: 0 auto;  
+  text-align: center;  
+  padding-top: 40px; 
+  display: flex; 
+  justify-content: start;
+}
+
+.filters-container label, .filters-container select {
+  font-family: Poppins;  
+  font-size: 12px;  
+  font-weight: 500;  
+  line-height: 18px;  
+  letter-spacing: 0.03em;  
+  text-align: left;  
+  text-transform: uppercase;  
+}
+
+#category-filter{
+  margin-right: 42px;
+}
+
+#date-filter{
+  margin-left: 310px;
+}
+
+#category-filter,
+#format-filter,
+#date-filter{
+  width: 260px;  /* Largeur Filtres */
+  height: 42px;  /* Hauteur Filtres */
+  padding: 11px 18px 11px 18px;  /* Marge intérieure Filtres */
+  margin-bottom: 20px; 
+  border-radius: 8px;  /* Coins Filtres */
+  border: 1.3px solid #B8BBC2;  /* Bordure solide */
+  justify-content: space-between;
+}
+
+.option:hover {
+  background-color: red;
+}
+
