@@ -1,39 +1,90 @@
-jQuery(document).ready(function ($) {
-    // Ouvrir la lightbox
-    $(".lightbox").on("click", function () {
-        const imageUrl = $(this).data("image");
-        const reference = $(this).data("reference");
-        const category = $(this).data("category");
+document.addEventListener("DOMContentLoaded", function () {
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightbox-image");
+    const photoReference = document.getElementById("photo-reference");
+    const photoCategory = document.getElementById("photo-category");
+    const closeLightbox = document.getElementById("close-lightbox");
+    const prevButton = document.querySelector(".lightbox-prev");
+    const nextButton = document.querySelector(".lightbox-next");
+    let currentIndex = -1;
 
-        if (imageUrl) {
-            $("#lightbox-image").attr("src", imageUrl);
-            $("#photo-reference").text(reference || "Référence non définie");
-            $("#photo-category").text(category || "Catégorie non définie");
-            $("#lightbox").fadeIn(); // Afficher la lightbox
+    // Récupération des images pour la lightbox
+    const images = Array.from(document.querySelectorAll(".lightbox"));
+    const imageData = images.map((img, index) => {
+        const src = img.getAttribute("data-image");
+        const reference = img.getAttribute("data-reference") || "Référence non définie";
+        const category = img.getAttribute("data-category") || "Catégorie non définie";
+
+        return {
+            src: src,
+            reference: reference,
+            category: category,
+        };
+    });
+
+    // Ouvrir la lightbox
+    function openLightbox(index) {
+        if (index < 0 || index >= imageData.length) return;
+        currentIndex = index;
+        const { src, reference, category } = imageData[currentIndex];
+
+        if (!src) {
+            console.error("Aucune image valide à afficher.");
+            return;
+        }
+
+        lightboxImage.src = src;
+        photoReference.textContent = reference;
+        photoCategory.textContent = category;
+
+        lightbox.classList.add("show");
+    }
+
+    // Fermer la lightbox
+    function closeLightboxFunc() {
+        lightbox.classList.remove("show");
+        currentIndex = -1;
+    }
+
+    // Afficher image précédente
+    function showPrevImage() {
+        if (currentIndex > 0) {
+            openLightbox(currentIndex - 1);
+        }
+    }
+
+    // Afficher image suivante
+    function showNextImage() {
+        if (currentIndex < imageData.length - 1) {
+            openLightbox(currentIndex + 1);
+        }
+    }
+
+    // Écouteurs d'événements
+    images.forEach((img, index) => {
+        img.addEventListener("click", () => openLightbox(index));
+    });
+
+    closeLightbox.addEventListener("click", closeLightboxFunc);
+    prevButton.addEventListener("click", showPrevImage);
+    nextButton.addEventListener("click", showNextImage);
+
+    lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox) {
+            closeLightboxFunc();
         }
     });
 
-    // Fermer la lightbox
-    $("#close-lightbox").on("click", function () {
-        $("#lightbox").fadeOut(); // Masquer la lightbox
-    });
+    // Navigation clavier
+    document.addEventListener("keydown", (e) => {
+        if (!lightbox.classList.contains("show")) return;
 
-    // Navigation dans la lightbox
-    $(".lightbox-prev, .lightbox-next").on("click", function () {
-        const isNext = $(this).hasClass("lightbox-next");
-        const currentPhoto = $(".photo-thumbnail img[src='" + $("#lightbox-image").attr("src") + "']").closest(".photo-item");
-        const newPhoto = isNext ? currentPhoto.next(".photo-item") : currentPhoto.prev(".photo-item");
-
-        if (newPhoto.length > 0) {
-            const newImage = newPhoto.find(".lightbox").data("image");
-            const newReference = newPhoto.find(".lightbox").data("reference");
-            const newCategory = newPhoto.find(".lightbox").data("category");
-
-            if (newImage) {
-                $("#lightbox-image").attr("src", newImage);
-                $("#photo-reference").text(newReference || "Référence non définie");
-                $("#photo-category").text(newCategory || "Catégorie non définie");
-            }
+        if (e.key === "Escape") {
+            closeLightboxFunc();
+        } else if (e.key === "ArrowLeft") {
+            showPrevImage();
+        } else if (e.key === "ArrowRight") {
+            showNextImage();
         }
     });
 });

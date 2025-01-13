@@ -455,7 +455,7 @@ button#load-more-btn:hover{
   border-radius: 5px;
 }
 /* Lightbox Container */
-/* Lightbox Container */
+/* Lightbox */
 .lightbox-container {
   position: fixed;
   top: 0;
@@ -543,6 +543,53 @@ button#load-more-btn:hover{
   cursor: pointer;
   z-index: 1002;
 }
+
+/* Hover sur les photos */
+.photo-hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.4); /* Fond transparent noir */
+}
+
+.photo-thumbnail:hover .photo-hover-overlay {
+  opacity: 1;
+}
+
+.photo-icon-center, .photo-icon-top-right {
+  color: white;
+  font-size: 24px;
+}
+
+.photo-reference, .photo-category {
+  color: white;
+  font-size: 14px;
+}
+
+.photo-info-hover {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.photo-reference {
+  margin-left: 10px;
+}
+
+.photo-category {
+  margin-right: 10px;
+}
+
 
 /* ***Single page*** */
 

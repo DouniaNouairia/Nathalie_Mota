@@ -29,7 +29,8 @@ function mon_theme_enqueue_scripts() {
     wp_enqueue_script('filtres-ajax-script', get_template_directory_uri() . '/script/filtres_ajax.js', array('jquery'), null, true);
     wp_enqueue_script('load-more-script', get_template_directory_uri() . '/script/load_more.js', array('jquery'), null, true);
     wp_enqueue_script('lightbox-script', get_template_directory_uri() . '/script/lightbox.js', array('jquery'), null, true);
-    wp_enqueue_script('menu-burger-script', get_template_directory_uri() . '/script.js', array('jquery'), null, true);
+    // wp_enqueue_script('menu-burger-script', get_template_directory_uri() . '/menu-burger.js', array('jquery'), null, true);
+    
     // Localiser les données pour les scripts
     wp_localize_script('filtres-ajax-script', 'filtres_ajax_params', array(
         'ajax_url' => admin_url('admin-ajax.php'),
