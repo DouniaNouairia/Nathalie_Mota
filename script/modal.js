@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
             trigger.addEventListener('click', function (e) {
                 e.preventDefault(); // Empêche le comportement par défaut si c'est un lien
                 modal.style.display = 'flex'; // Affiche la modale
+                
 
                 // Récupérer la référence de la photo et l'ajouter au champ de référence
                 if (refPhotoElement && referenceField) {

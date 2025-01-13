@@ -94,8 +94,80 @@ body{
   border-top: solid 1px black;
 }
 
+/* Icône du menu burger */
+.burger-menu {
+  display: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: white;
+}
 
-/* Modal*/
+/* Panneau du menu mobile */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  display: none; /* Caché par défaut */
+  justify-content: center;
+  align-items: center;
+}
+
+.mobile-menu-overlay.active {
+  display: flex; /* Affiche le menu mobile */
+}
+
+.mobile-menu-content {
+  text-align: center;
+  width: 100%;
+}
+
+.mobile-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-nav-list li {
+  margin: 20px 0;
+}
+
+.mobile-nav-list li a {
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.mobile-nav-list li a:hover {
+  color: #f4a261;
+}
+
+/* Bouton pour fermer le menu */
+.close-menu {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Responsive : Activer le menu burger sur mobile */
+@media screen and (max-width: 768px) {
+  .burger-menu {
+      display: block; /* Affiche le menu burger */
+  }
+
+  .header-nav {
+      display: none; /* Cache la navigation classique */
+  }
+}
+
+/* Modal */
 .contact-modal {
   display: none; 
   position: fixed;
@@ -294,6 +366,184 @@ button#load-more-btn:hover{
   background-color: black;
 }
 
+/* HOVER & LIGHTBOX */
+
+.photo-thumbnail:hover img {
+  transform: scale(1.05);
+  opacity: 0.8;
+}
+
+.photo-hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Fond noir transparent */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.photo-thumbnail:hover .photo-hover-overlay {
+  opacity: 1;
+}
+
+.photo-icon-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 24px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.photo-icon-top-right {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #fff;
+  font-size: 18px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.photo-icon-center:hover,
+.photo-icon-top-right:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #000;
+}
+
+.photo-info-hover {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #fff;
+  z-index: 10;
+  padding: 0 10px;
+}
+
+.photo-reference {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.photo-category {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+/* Lightbox Container */
+/* Lightbox Container */
+.lightbox-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8); /* Fond noir avec 80% de transparence */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* S'assurer que la lightbox apparaît au-dessus de tout le reste */
+  visibility: hidden; /* La lightbox est cachée par défaut */
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.lightbox-container.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Image dans la Lightbox */
+#lightbox-image {
+  max-width: 90%;
+  max-height: 90%;
+  display: block;
+  margin: auto;
+}
+
+/* Informations de la photo dans la Lightbox */
+.photo-info-lightbox {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  font-size: 16px;
+  z-index: 1001;
+  background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent */
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Style des flèches */
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.8); /* Fond semi-transparent */
+  border-radius: 5px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.lightbox-prev {
+  left: 20px;
+}
+
+.lightbox-next {
+  right: 20px;
+}
+
+/* Espacement entre l'icône et le texte */
+.lightbox-nav i {
+  margin-right: 5px;
+}
+
+.lightbox-nav:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Croix pour fermer la Lightbox */
+.close-lightbox {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 1002;
+}
+
 /* ***Single page*** */
 
 section#single-photo {
@@ -393,8 +643,8 @@ button.modal_cnt_single_photo {
   bottom: 100%; /* Positionner au-dessus de la flèche */
   left: 50%;
   transform: translateX(-50%);
-  width: 100px; 
-  height: 100px; 
+  width: 80px; 
+  height: 80px; 
   background-size: cover;
   background-position: center;
   border: 2px solid #ddd;

@@ -6,10 +6,10 @@ add_theme_support( 'post-thumbnails' );
 
 
 // Ajouter - FontAwesome
-// function enqueue_font_awesome() {
-//     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css', array(), null);
-// }
-// add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
+function enqueue_font_awesome() {
+    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css', array(), null);
+}
+add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
 
 // Ajouter automatiquement le titre du site dans l'en-tête du site
 add_theme_support( 'title-tag' );
@@ -24,12 +24,12 @@ add_action('wp_enqueue_scripts', 'my_theme_enqueue_styles');
 // Ajout du script
 function mon_theme_enqueue_scripts() {
     // Enqueue les styles et scripts nécessaires
-    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'); // Font Awesome
     wp_enqueue_script('jquery'); // Assurez-vous que jQuery est chargé
     wp_enqueue_script('modal-script', get_template_directory_uri() . '/script/modal.js', array('jquery'), null, true);
     wp_enqueue_script('filtres-ajax-script', get_template_directory_uri() . '/script/filtres_ajax.js', array('jquery'), null, true);
     wp_enqueue_script('load-more-script', get_template_directory_uri() . '/script/load_more.js', array('jquery'), null, true);
-    
+    wp_enqueue_script('lightbox-script', get_template_directory_uri() . '/script/lightbox.js', array('jquery'), null, true);
+    wp_enqueue_script('menu-burger-script', get_template_directory_uri() . '/script.js', array('jquery'), null, true);
     // Localiser les données pour les scripts
     wp_localize_script('filtres-ajax-script', 'filtres_ajax_params', array(
         'ajax_url' => admin_url('admin-ajax.php'),

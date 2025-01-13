@@ -13,6 +13,11 @@
     <a href="<?php echo home_url( '/' ); ?>">
       <img src="<?php echo get_template_directory_uri(); ?>/assets/images/Logo.png" alt="Logo">
     </a>  
+    <!-- Icône du menu burger -->
+    <div class="burger-menu">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+
     <?php
 wp_nav_menu( array(
     // 'theme_location'=> 'header-menu', 'menu_class' =>'header_nav','items_wrap'     => '%3$s'
@@ -24,7 +29,20 @@ wp_nav_menu( array(
     'menu_class'      => 'header-nav-item', // Classe CSS pour les liens du menu
     ) );
 ?>
-
+<!-- Panneau coulissant du menu mobile -->
+<div class="mobile-menu-overlay">
+        <div class="mobile-menu-content">
+            <div class="close-menu">
+                <i class="fa-solid fa-times"></i>
+            </div>
+            <?php
+            wp_nav_menu(array(
+                'theme_location' => 'header-menu',
+                'container' => false,
+                'menu_class' => 'mobile-nav-list',
+            ));
+            ?>
+        </div>
 
 </header>
 
