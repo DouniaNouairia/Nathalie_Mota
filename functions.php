@@ -6,10 +6,10 @@ add_theme_support( 'post-thumbnails' );
 
 
 // Ajouter - FontAwesome
-function enqueue_font_awesome() {
-    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'); // You can change the version URL as needed.
-}
-add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
+// function enqueue_font_awesome() {
+//     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css', array(), null);
+// }
+// add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
 
 // Ajouter automatiquement le titre du site dans l'en-tête du site
 add_theme_support( 'title-tag' );
@@ -23,17 +23,26 @@ add_action('wp_enqueue_scripts', 'my_theme_enqueue_styles');
 
 // Ajout du script
 function mon_theme_enqueue_scripts() {
-    // Enqueue les scripts
-    wp_enqueue_script('modal-script', get_template_directory_uri() . '/script/modal.js', array(), null, true);
+    // Enqueue les styles et scripts nécessaires
+    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'); // Font Awesome
+    wp_enqueue_script('jquery'); // Assurez-vous que jQuery est chargé
+    wp_enqueue_script('modal-script', get_template_directory_uri() . '/script/modal.js', array('jquery'), null, true);
     wp_enqueue_script('filtres-ajax-script', get_template_directory_uri() . '/script/filtres_ajax.js', array('jquery'), null, true);
     wp_enqueue_script('load-more-script', get_template_directory_uri() . '/script/load_more.js', array('jquery'), null, true);
-    // Localiser le script pour passer les variables de PHP à JS
-    wp_localize_script('filtres-ajax-script', 'filtres_ajax_params', 'load-more-script', array(
+    
+    // Localiser les données pour les scripts
+    wp_localize_script('filtres-ajax-script', 'filtres_ajax_params', array(
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('filtres_ajax_nonce')
     ));
+    wp_localize_script('load-more-script', 'wp_data', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'nonce' => wp_create_nonce('load_more_nonce')
+    ));
 }
 add_action('wp_enqueue_scripts', 'mon_theme_enqueue_scripts');
+
+
 
 
 // Ajout des emplacements menu
@@ -187,30 +196,30 @@ function filter_photos() {
 
 // ***LOAD MORE***
 
-add_action('wp_ajax_load_more_posts', 'load_more_posts');
-add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
-
 function load_more_posts() {
+    // Obtenez les paramètres de la requête AJAX
     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-    $category = isset($_GET['category']) ? sanitize_text_field($_GET['category']) : '';
-    $format = isset($_GET['format']) ? sanitize_text_field($_GET['format']) : '';
-    $dateSort = isset($_GET['dateSort']) ? sanitize_text_field($_GET['dateSort']) : 'DESC';
+    $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
+    $format = isset($_GET['format']) ? $_GET['format'] : 'ALL';
+    $dateSort = isset($_GET['dateSort']) ? $_GET['dateSort'] : 'ALL';
 
+    // Arguments de la requête pour charger plus de photos
     $args = array(
         'post_type' => 'photo',
-        'posts_per_page' => 8,
-        'paged' => $page,
+        'posts_per_page' => 8,   // Nombre de photos par page
+        'paged' => $page,        // Page actuelle
     );
 
-    if ($category && $category !== 'ALL') {
+    // Filtrage des photos selon les paramètres
+    if ($category !== 'ALL') {
         $args['tax_query'][] = array(
-            'taxonomy' => 'categorie',
+            'taxonomy' => 'category',
             'field'    => 'slug',
             'terms'    => $category,
         );
     }
 
-    if ($format && $format !== 'ALL') {
+    if ($format !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'format',
             'field'    => 'slug',
@@ -218,32 +227,32 @@ function load_more_posts() {
         );
     }
 
-    if ($dateSort && in_array($dateSort, ['ASC', 'DESC'])) {
+    if ($dateSort !== 'ALL') {
         $args['orderby'] = 'date';
-        $args['order'] = $dateSort;
+        $args['order'] = ($dateSort === 'ASC') ? 'ASC' : 'DESC';
     }
 
     $query = new WP_Query($args);
+    $posts = array();
 
     if ($query->have_posts()) {
         while ($query->have_posts()) {
             $query->the_post();
-
-            // Remplacez par votre structure HTML
-            echo '<div class="photo-item">';
-            echo '<div class="photo-thumbnail">';
-            echo get_the_post_thumbnail(get_the_ID(), 'medium');
-            echo '</div>';
-            echo '<h2>' . get_the_title() . '</h2>';
-            echo '</div>';
+            $posts[] = array(
+                'id'    => get_the_ID(),
+                'image' => get_the_post_thumbnail_url(get_the_ID(), 'medium'),
+                'title' => get_the_title(),
+            );
         }
-    } else {
-        echo ''; // Aucun résultat
     }
 
     wp_reset_postdata();
-    wp_die();
+
+    wp_send_json(array('posts' => $posts)); // Envoi des photos sous forme de JSON
 }
+add_action('wp_ajax_load_more_posts', 'load_more_posts');
+add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
+
 
   
   

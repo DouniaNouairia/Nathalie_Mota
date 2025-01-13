@@ -1,26 +1,16 @@
-<?php get_header(); ?>
-
-
-<?php
-/**
- * Template for displaying a single photo.
- *
- * @package WordPress
- * @subpackage Nathalie_Mota
- */
-
+<?php 
 get_header();
 ?>
 
 <section id="single-photo" class="single-photo-container">
-    <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+    <?php if (have_posts()) : ?>
+        <?php while (have_posts()) : the_post(); ?>
 
         <div class="single-photo-wrapper">
             <!-- Bloc de métadonnées et image -->
             <div class="single-photo-meta">
-                <h3 class="photo-title"><?php the_title(); ?></h3>
+                <h2 class="photo-title"><?php the_title(); ?></h2>
                 <?php
-                // Récupération des champs personnalisés
                 $reference = get_post_meta(get_the_ID(), 'reference', true);
                 $type = get_post_meta(get_the_ID(), 'type', true);
                 $annee = get_post_meta(get_the_ID(), 'annee', true);
@@ -30,21 +20,21 @@ get_header();
 
                 <ul class="photo-meta">
                     <?php if ($reference) : ?>
-                        <li>Référence : 
+                        <li class="meta-list">RÉFÉRENCE : 
                             <span class="ref_photo"><?php echo esc_html($reference); ?></span>
                         </li>
                     <?php endif; ?>
                     <?php if ($categories) : ?>
-                        <li>Catégorie : <?php echo esc_html(join(', ', wp_list_pluck($categories, 'name'))); ?></li>
+                        <li class="meta-list">CATÉGORIE : <?php echo esc_html(join(', ', wp_list_pluck($categories, 'name'))); ?></li>
                     <?php endif; ?>
                     <?php if ($formats) : ?>
-                        <li>Format : <?php echo esc_html(join(', ', wp_list_pluck($formats, 'name'))); ?></li>
+                        <li class="meta-list">FORMAT : <?php echo esc_html(join(', ', wp_list_pluck($formats, 'name'))); ?></li>
                     <?php endif; ?>
                     <?php if ($type) : ?>
-                        <li>Type : <?php echo esc_html($type); ?></li>
+                        <li class="meta-list">TYPE : <?php echo esc_html($type); ?></li>
                     <?php endif; ?>
                     <?php if ($annee) : ?>
-                        <li>Année : <?php echo esc_html($annee); ?></li>
+                        <li class="meta-list">ANNÉE : <?php echo esc_html($annee); ?></li>
                     <?php endif; ?>
                 </ul>
             </div>
@@ -58,44 +48,14 @@ get_header();
             </div>
         </div>
 
-        <div  class="single-photo-cnt">
-            <p>Cette photo vous interesse?</p>
-            <button class="modal_cnt_single_photo">Contact</button>
-        </div>
+        <!-- Section contact et flèches de navigation -->
+        <?php get_template_part('templates/ctn-prew-next-post');?>
 
-        <!-- Photos apparentées -->
-        <div class="related-photos">
-            <h4>Vous aimerez aussi</h4>
-            <div class="photo-list">
-                <?php
-                $related_photos = new WP_Query([
-                    'post_type' => 'photo',
-                    'posts_per_page' => 4,
-                    'post__not_in' => [get_the_ID()],
-                    'tax_query' => [
-                        [
-                            'taxonomy' => 'categorie',
-                            'field' => 'id',
-                            'terms' => wp_get_post_terms(get_the_ID(), 'categorie', ['fields' => 'ids']),
-                        ],
-                    ],
-                ]);
-
-                if ($related_photos->have_posts()) :
-                    while ($related_photos->have_posts()) : $related_photos->the_post();
-                        get_template_part('template_parts/photo_block');
-                    endwhile;
-                    wp_reset_postdata();
-                else :
-                    echo '<p>Aucune photo apparentée trouvée.</p>';
-                endif;
-                ?>
-            </div>
-        </div>
-
-    <?php endwhile; endif; ?>
+        <?php get_template_part('templates/related-post');?>
+        <?php endwhile; ?>
+    <?php endif; ?>
 </section>
 
-
-
-<?php get_footer(); ?>
+<?php 
+get_footer(); 
+?>
