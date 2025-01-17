@@ -13,6 +13,7 @@ wp_nav_menu( array(
 </div>
 
 <?php get_template_part('templates/contact_modal'); ?>
+<?php get_template_part('templates/lightbox'); ?>
 <?php wp_footer(); ?>
 
 

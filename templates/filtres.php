@@ -1,34 +1,41 @@
 <div class="filters-container">
-    <!-- Filtre | Categorie -->
-    <label for="category-filter"></label>
-    <select name="category-filter" id="category-filter">
-        <option value="ALL">CATÉGORIE</option>
-        <?php
-        $photo_categories = get_terms('categorie');
-        foreach ($photo_categories as $category) {
-            echo '<option value="' . $category->slug . '">' . $category->name . '</option>';
-        }
-        ?>
-    </select>
+    <!-- Filtre | Catégorie -->
+    <div class="custom-flex">
+        <div class="custom-select" id="category-filter">
+            <div class="selected-option">CATÉGORIE</div>
+            <ul class="options-list">
+            <li class="option-title">CATÉGORIE</li>
+                <?php
+                $photo_categories = get_terms('categorie');
+                foreach ($photo_categories as $category) {
+                    echo '<li class="option" data-value="' . $category->slug . '">' . $category->name . '</li>';
+                }
+                ?>
+            </ul>
+        </div>
 
-    <!-- Filtre | Format -->
-    <label for="format-filter"></label>
-    <select name="format-filter" id="format-filter">
-        <option value="ALL">FORMAT</option>
-        <?php
-        $photo_formats = get_terms('format');
-        foreach ($photo_formats as $format) {
-            echo '<option value="' . $format->slug . '">' . $format->name . '</option>';
-        }
-        ?>
-    </select>
+        <!-- Filtre | Format -->
+        <div class="custom-select" id="format-filter">
+            <div class="selected-option">FORMATS</div>
+            <ul class="options-list">
+            <li class="option-title">FORMAT</li>
+                <?php
+                $photo_formats = get_terms('format');
+                foreach ($photo_formats as $format) {
+                    echo '<li class="option" data-value="' . $format->slug . '">' . $format->name . '</li>';
+                }
+                ?>
+            </ul>
+        </div>
+    </div>
 
     <!-- Filtre | Trier par date -->
-    <label for="date-filter"></label>
-    <select name="date-filter" id="date-filter">
-        <option value="ALL">TRIER PAR</option>
-        <option value="DESC">Du plus récent au plus ancien</option>
-        <option value="ASC">Du plus ancien au plus récent</option>
-    </select>
+    <div class="custom-select" id="date-filter">
+        <div class="selected-option">TRIER PAR</div>
+        <ul class="options-list">
+        <li class="option-title">TRIER PAR</li>
+            <li class="option" data-value="DESC">Du plus récent au plus ancien</li>
+            <li class="option" data-value="ASC">Du plus ancien au plus récent</li>
+        </ul>
+    </div>
 </div>
-

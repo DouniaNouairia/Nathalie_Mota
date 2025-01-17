@@ -26,10 +26,10 @@ function mon_theme_enqueue_scripts() {
     // Enqueue les styles et scripts nécessaires
     wp_enqueue_script('jquery'); // Assurez-vous que jQuery est chargé
     wp_enqueue_script('modal-script', get_template_directory_uri() . '/script/modal.js', array('jquery'), null, true);
+    wp_enqueue_script('lightbox-script', get_template_directory_uri() . '/script/lightbox.js', array('jquery'), null, true);
     wp_enqueue_script('filtres-ajax-script', get_template_directory_uri() . '/script/filtres_ajax.js', array('jquery'), null, true);
     wp_enqueue_script('load-more-script', get_template_directory_uri() . '/script/load_more.js', array('jquery'), null, true);
-    wp_enqueue_script('lightbox-script', get_template_directory_uri() . '/script/lightbox.js', array('jquery'), null, true);
-    // wp_enqueue_script('menu-burger-script', get_template_directory_uri() . '/menu-burger.js', array('jquery'), null, true);
+    wp_enqueue_script('menu-burger-script', get_template_directory_uri() . '/script/menu-burger.js', array('jquery'), null, true);
     
     // Localiser les données pour les scripts
     wp_localize_script('filtres-ajax-script', 'filtres_ajax_params', array(
@@ -92,33 +92,47 @@ class Custom_Walker_Nav_Menu extends Walker_Nav_Menu {
 
 // ****HERO****
 function get_random_hero_image() {
-    $images = [
-        get_template_directory_uri() . '/assets/images/nathalie-0.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-1.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-2.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-3.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-4.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-5.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-6.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-7.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-8.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-9.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-10.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-11.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-12.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-13.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-14.jpeg',
-        get_template_directory_uri() . '/assets/images/nathalie-15.jpeg',
-        
-    ];
+    // Initialiser les arguments de la requête pour le CPT "photo"
+    $args = array(
+        'post_type'      => 'photo', // Nom de votre Custom Post Type
+        'posts_per_page' => -1,      // Récupérer tous les posts
+        'post_status'    => 'publish', // Seulement les posts publiés
+    );
 
-    // Sélectionner une image aléatoire
-    $random_image = $images[array_rand($images)];
+    // Effectuer la requête
+    $query = new WP_Query($args);
 
-    return $random_image;
+    // Tableau pour stocker les URLs des images
+    $images = array();
+
+    // Parcourir les posts et récupérer les images à la une
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+
+            // Récupérer l'URL de l'image à la une
+            $image_url = get_the_post_thumbnail_url(get_the_ID(), 'full');
+
+            // Ajouter l'image au tableau si elle existe
+            if ($image_url) {
+                $images[] = $image_url;
+            }
+        }
+        wp_reset_postdata(); // Réinitialiser les données de post
+    }
+
+    // Vérifier si des images ont été trouvées
+    if (!empty($images)) {
+        // Sélectionner une image aléatoire
+        $random_image = $images[array_rand($images)];
+        return $random_image;
+    }
+
+    // Retourner une image par défaut si aucune image n'est trouvée
+    return get_template_directory_uri() . '/assets/images/nathalie-0.jpeg';
 }
 
-// **recuperer le champs reference**
+// **RECUPERER LE CHAMPDE REFERENCE**
 
 function get_reference() {
     // Récupérer la valeur du champ SCF
@@ -139,14 +153,12 @@ function filter_photos() {
     $format = isset($_GET['format']) ? $_GET['format'] : '';
     $date = isset($_GET['date']) ? $_GET['date'] : '';
 
-    // Configuration de base de la requête
     $args = array(
         'post_type' => 'photo',
         'posts_per_page' => 8,
-        'tax_query' => array(), // Initialise la tax_query comme un tableau vide
+        'tax_query' => array(),
     );
 
-    // Ajouter le filtre de catégorie si défini
     if ($category && $category !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'categorie',
@@ -155,7 +167,6 @@ function filter_photos() {
         );
     }
 
-    // Ajouter le filtre de format si défini
     if ($format && $format !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'format',
@@ -164,18 +175,15 @@ function filter_photos() {
         );
     }
 
-    // Si plusieurs taxonomies sont ajoutées, préciser la relation entre elles
     if (!empty($args['tax_query'])) {
-        $args['tax_query']['relation'] = 'AND'; // Combine les filtres avec une relation "ET"
+        $args['tax_query']['relation'] = 'AND';
     }
 
-    // Ajouter le tri par date si défini
     if ($date && $date !== 'ALL') {
         $args['orderby'] = 'date';
         $args['order'] = ($date === 'ASC') ? 'ASC' : 'DESC';
     }
 
-    // Exécution de la requête
     $query = new WP_Query($args);
 
     $photos = array();
@@ -185,15 +193,17 @@ function filter_photos() {
             $query->the_post();
             $photos[] = array(
                 'image' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
+                'reference' => get_post_meta(get_the_ID(), 'photo_reference', true),
+                'category' => get_the_terms(get_the_ID(), 'categorie')[0]->name ?? '',
             );
         }
     }
 
     wp_reset_postdata();
 
-    // Retour de la réponse JSON
     wp_send_json_success(array('photos' => $photos));
 }
+
 
 // ***LOAD MORE***
 
@@ -257,6 +267,3 @@ add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
 
   
   
-
-
-

@@ -9,18 +9,21 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentIndex = -1;
 
     // Récupération des images pour la lightbox
-    const images = Array.from(document.querySelectorAll(".lightbox"));
-    const imageData = images.map((img, index) => {
-        const src = img.getAttribute("data-image");
-        const reference = img.getAttribute("data-reference") || "Référence non définie";
-        const category = img.getAttribute("data-category") || "Catégorie non définie";
+    function updateImageData() {
+        return Array.from(document.querySelectorAll(".lightbox")).map((img, index) => {
+            const src = img.getAttribute("data-image");
+            const reference = img.getAttribute("data-reference") || "Référence non définie";
+            const category = img.getAttribute("data-category") || "Catégorie non définie";
 
-        return {
-            src: src,
-            reference: reference,
-            category: category,
-        };
-    });
+            return {
+                src: src,
+                reference: reference,
+                category: category,
+            };
+        });
+    }
+
+    let imageData = updateImageData();
 
     // Ouvrir la lightbox
     function openLightbox(index) {
@@ -61,8 +64,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Écouteurs d'événements
-    images.forEach((img, index) => {
-        img.addEventListener("click", () => openLightbox(index));
+    document.addEventListener("click", function (e) {
+        if (e.target.classList.contains("lightbox")) {
+            const index = Array.from(document.querySelectorAll(".lightbox")).indexOf(e.target);
+            openLightbox(index);
+        }
     });
 
     closeLightbox.addEventListener("click", closeLightboxFunc);
@@ -75,16 +81,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Navigation clavier
-    document.addEventListener("keydown", (e) => {
-        if (!lightbox.classList.contains("show")) return;
-
-        if (e.key === "Escape") {
-            closeLightboxFunc();
-        } else if (e.key === "ArrowLeft") {
-            showPrevImage();
-        } else if (e.key === "ArrowRight") {
-            showNextImage();
-        }
+    // Mettre à jour les données d'images après filtrage
+    document.addEventListener("ajaxComplete", function () {
+        imageData = updateImageData();
     });
 });
+
+function openLightboxFromData(imageSrc, reference, category) {
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImage = document.getElementById("lightbox-image");
+    const photoReference = document.getElementById("photo-reference");
+    const photoCategory = document.getElementById("photo-category");
+
+    lightboxImage.src = imageSrc;
+    photoReference.textContent = reference || "Référence non définie";
+    photoCategory.textContent = category || "Catégorie non définie";
+
+    lightbox.classList.add("show");
+}

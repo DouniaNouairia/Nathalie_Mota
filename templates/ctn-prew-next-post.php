@@ -1,6 +1,6 @@
 <section class="arrows-cnt">
             <div class="single-photo-cnt">
-                <p>Cette photo vous intéresse ?</p>
+                <p class="ctn-prew-next-post-p">Cette photo vous intéresse ?</p>
                 <button class="modal_cnt_single_photo">Contact</button>
             </div>
             <div class="arrows">
@@ -36,8 +36,8 @@
         $prev_thumb = get_the_post_thumbnail_url($prev_post->ID, 'thumbnail') ?: get_template_directory_uri() . '/assets/images/default-photo.jpg'; 
     ?>
         <a href="<?php echo esc_url(get_permalink($prev_post->ID)); ?>" class="photo-prev" title="<?php echo esc_attr(get_the_title($prev_post->ID)); ?>">
-            <i class="fa-solid fa-arrow-left-long"></i>
-            <div class="photo-thumb" style="background-image: url('<?php echo esc_url($prev_thumb); ?>');"></div>
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/Left-hover.png" alt="fleche gauche">
+        <div class="photo-thumb-left" style="background-image: url('<?php echo esc_url($prev_thumb); ?>');"></div>
         </a>
     <?php endif; ?>
 
@@ -46,8 +46,8 @@
         $next_thumb = get_the_post_thumbnail_url($next_post->ID, 'thumbnail') ?: get_template_directory_uri() . '/assets/images/default-photo.jpg'; 
     ?>
         <a href="<?php echo esc_url(get_permalink($next_post->ID)); ?>" class="photo-next" title="<?php echo esc_attr(get_the_title($next_post->ID)); ?>">
-            <i class="fa-solid fa-arrow-right-long"></i>
-            <div class="photo-thumb" style="background-image: url('<?php echo esc_url($next_thumb); ?>');"></div>
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/Right-hover.png" alt="fleche droite">
+            <div class="photo-thumb-right" style="background-image: url('<?php echo esc_url($next_thumb); ?>');"></div>
         </a>
     <?php endif; ?>
 </div>
