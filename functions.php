@@ -244,6 +244,7 @@ function load_more_posts() {
         'paged' => $page,
     );
 
+    // Filtrer par catégorie si défini
     if ($category !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'categorie',
@@ -252,6 +253,7 @@ function load_more_posts() {
         );
     }
 
+    // Filtrer par format si défini
     if ($format !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'format',
@@ -260,6 +262,7 @@ function load_more_posts() {
         );
     }
 
+    // Trier par date si défini
     if ($dateSort !== 'ALL') {
         $args['orderby'] = 'date';
         $args['order'] = ($dateSort === 'ASC') ? 'ASC' : 'DESC';
@@ -268,6 +271,7 @@ function load_more_posts() {
     $query = new WP_Query($args);
     $posts = array();
 
+    // Préparer les données pour la réponse JSON
     if ($query->have_posts()) {
         while ($query->have_posts()) {
             $query->the_post();
@@ -277,20 +281,22 @@ function load_more_posts() {
 
             $posts[] = array(
                 'id'       => get_the_ID(),
-                'image'    => get_the_post_thumbnail_url(get_the_ID(), 'medium'),
-                'reference'=> get_post_meta(get_the_ID(), 'reference', true),
+                'image'    => get_the_post_thumbnail_url(get_the_ID(), 'medium'), // Image miniature
+                'reference'=> get_post_meta(get_the_ID(), 'reference', true),    // Référence personnalisée
                 'category' => $category_name,
-                'link'     => get_permalink(get_the_ID()),
+                'link'     => get_permalink(get_the_ID()),                      // Lien vers la publication
             );
         }
     }
 
     wp_reset_postdata();
 
+    // Retourner les données au format JSON
     wp_send_json(array('posts' => $posts));
 }
 add_action('wp_ajax_load_more_posts', 'load_more_posts');
 add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
+
 
 
   

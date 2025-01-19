@@ -22,12 +22,15 @@ document.addEventListener("DOMContentLoaded", function () {
     let imageData = updateImageData();
 
     // Ouvrir la lightbox
-    function openLightbox(index) {
-        if (index < 0) index = imageData.length - 1; // Boucle infinie
-        if (index >= imageData.length) index = 0; // Boucle infinie
+    function openLightbox(index, lightboxElements) {
+        if (index < 0) index = lightboxElements.length - 1; // Boucle infinie
+        if (index >= lightboxElements.length) index = 0; // Boucle infinie
         currentIndex = index;
 
-        const { src, reference, category } = imageData[currentIndex];
+        const currentElement = lightboxElements[index];
+        const src = currentElement.getAttribute("data-image");
+        const reference = currentElement.getAttribute("data-reference") || "Référence non définie";
+        const category = currentElement.getAttribute("data-category") || "Catégorie non définie";
 
         if (!src) {
             console.error("Aucune image valide à afficher.");
@@ -48,20 +51,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Afficher l'image précédente
-    function showPrevImage() {
-        openLightbox(currentIndex - 1);
+    function showPrevImage(lightboxElements) {
+        openLightbox(currentIndex - 1, lightboxElements);
     }
 
     // Afficher l'image suivante
-    function showNextImage() {
-        openLightbox(currentIndex + 1);
+    function showNextImage(lightboxElements) {
+        openLightbox(currentIndex + 1, lightboxElements);
     }
 
     // Gestion des clics sur les miniatures
     document.addEventListener("click", function (e) {
         if (e.target.closest(".lightbox")) {
-            const index = Array.from(document.querySelectorAll(".lightbox")).indexOf(e.target.closest(".lightbox"));
-            openLightbox(index);
+            const filteredLightboxElements = Array.from(document.querySelectorAll(".lightbox")); // Obtenir les lightboxes visibles
+            const index = filteredLightboxElements.indexOf(e.target.closest(".lightbox"));
+            openLightbox(index, filteredLightboxElements);
         }
     });
 
@@ -71,15 +75,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (prevButton) {
-        prevButton.addEventListener("click", showPrevImage);
+        prevButton.addEventListener("click", function() {
+            const filteredLightboxElements = Array.from(document.querySelectorAll(".lightbox"));
+            showPrevImage(filteredLightboxElements);
+        });
     }
 
     if (nextButton) {
-        nextButton.addEventListener("click", showNextImage);
+        nextButton.addEventListener("click", function() {
+            const filteredLightboxElements = Array.from(document.querySelectorAll(".lightbox"));
+            showNextImage(filteredLightboxElements);
+        });
     }
 
-    // Mettre à jour les données après chargement ou filtrage
+    // Mettre à jour les données après un filtrage
     document.addEventListener("ajaxComplete", function () {
-        imageData = updateImageData();
+        imageData = updateImageData(); // Rafraîchit les données
+        console.log("Données de la lightbox mises à jour :", imageData);
     });
 });

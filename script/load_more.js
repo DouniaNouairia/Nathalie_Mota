@@ -25,6 +25,9 @@ jQuery(document).ready(function ($) {
                 $(this).find(".photo-hover-overlay").fadeOut(200);
             }
         );
+
+        // Déclenche un événement personnalisé pour mettre à jour les données de la lightbox
+        document.dispatchEvent(new CustomEvent("ajaxComplete"));
     }
 
     $loadMoreButton.on('click', function () {
