@@ -13,12 +13,12 @@
 
             <!-- Icône pour ouvrir la photo dans une lightbox -->
             <a href="javascript:void(0);" class="lightbox photo-icon-top-right"
-               data-image="<?php the_post_thumbnail_url('full'); ?>"
-               data-reference="<?php echo esc_attr(get_post_meta(get_the_ID(), 'reference', true)); ?>"
-               data-category="<?php
-                   $categories = get_the_terms(get_the_ID(), 'categorie');
-                   echo !empty($categories) && !is_wp_error($categories) ? esc_html($categories[0]->name) : 'Sans catégorie';
-               ?>">
+                data-image="<?php the_post_thumbnail_url('full'); ?>"
+                data-reference="<?php echo esc_attr(get_post_meta(get_the_ID(), 'reference', true)); ?>"
+                data-category="<?php
+                                $categories = get_the_terms(get_the_ID(), 'categorie');
+                                echo !empty($categories) && !is_wp_error($categories) ? esc_html($categories[0]->name) : 'Sans catégorie';
+                                ?>">
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/images/Fullscreen.png" alt="plein écran">
             </a>
 
@@ -26,9 +26,9 @@
             <div class="photo-info-hover">
                 <span class="photo-reference"><?php echo esc_html(get_post_meta(get_the_ID(), 'reference', true)); ?></span>
                 <span class="photo-category"><?php
-                    $categories = get_the_terms(get_the_ID(), 'categorie');
-                    echo !empty($categories) && !is_wp_error($categories) ? esc_html($categories[0]->name) : 'Sans catégorie';
-                ?></span>
+                                                $categories = get_the_terms(get_the_ID(), 'categorie');
+                                                echo !empty($categories) && !is_wp_error($categories) ? esc_html($categories[0]->name) : 'Sans catégorie';
+                                                ?></span>
             </div>
         </div>
     </div>

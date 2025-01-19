@@ -189,7 +189,7 @@ body {
 }
 /* Modal */
 .contact-modal {
-  display: flex; 
+  display: flex;
   position: fixed;
   top: 0;
   left: 0;
@@ -199,24 +199,24 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  opacity: 0; 
+  opacity: 0;
   transform: scale(1.1);
-  pointer-events: none; 
-  transition: opacity 0.5s ease, transform 0.3s ease; 
+  pointer-events: none;
+  transition: opacity 0.5s ease, transform 0.3s ease;
 }
 
 /* Lorsque la modal est active (visible) */
 .contact-modal.active {
-  opacity: 1; 
-  transform: scale(1); 
-  pointer-events: all; 
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
 }
 
 /* Lors de la fermeture */
 .contact-modal.closing {
-  opacity: 0; 
-  transform: scale(1.1); 
-  pointer-events: none; 
+  opacity: 0;
+  transform: scale(1.1);
+  pointer-events: none;
 }
 
 .modal-content {
@@ -355,9 +355,9 @@ h1 {
   margin-right: 75px;
 }
 
- .custom-flex{
+.custom-flex {
   margin-top: 1px;
- }
+}
 
 .selected-option {
   padding: 11px 18px;
@@ -368,7 +368,7 @@ h1 {
   text-align: left;
   color: black;
   position: relative;
-  padding-right: 30px; 
+  padding-right: 30px;
   cursor: pointer;
 }
 
@@ -380,7 +380,7 @@ h1 {
   transform: translateY(-50%);
   width: 16px; /* Ajustez la largeur de l'image */
   height: 16px; /* Ajustez la hauteur de l'image */
-  background-image: url('assets/images/chevron-down.png'); /* Chemin de votre image */
+  background-image: url("assets/images/chevron-down.png"); /* Chemin de votre image */
   background-size: contain; /* Ajuste la taille pour couvrir l'espace */
   background-repeat: no-repeat; /* Évite la répétition */
   background-position: center; /* Centrage de l'image */
@@ -425,7 +425,6 @@ h1 {
 .custom-select.open .options-list {
   display: block;
 }
-
 
 /* ***Bouton load more*** */
 .load-more {
@@ -523,7 +522,7 @@ button#load-more-btn:hover {
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
-  font-family: 'POPPINS';
+  font-family: "POPPINS";
   font-weight: 500;
 }
 
@@ -578,20 +577,20 @@ button#load-more-btn:hover {
   z-index: 1001;
 }
 .photo-ref-lightbox {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-weight: 500;
   color: white;
   position: fixed;
   left: 14.5%;
-    bottom: 1%;
+  bottom: 1%;
 }
 .photo-cat-lightbox {
-  font-family: 'Space Mono';
+  font-family: "Space Mono";
   font-weight: 400;
   color: white;
   position: fixed;
   right: 14.5%;
-    bottom: 1%;
+  bottom: 1%;
 }
 /* Style des flèches */
 .lightbox-nav {
@@ -604,9 +603,9 @@ button#load-more-btn:hover {
   z-index: 1001;
   display: flex;
   align-items: center;
-  font-family: 'Space Mono';
-    font-weight: 400;
-    font-size: 15px;
+  font-family: "Space Mono";
+  font-weight: 400;
+  font-size: 15px;
 }
 
 .lightbox-prev {
@@ -729,7 +728,7 @@ button.modal_cnt_single_photo {
 
 .photo-thumb-left {
   position: absolute;
-  bottom: 100%; 
+  bottom: 100%;
   /* left: 50%; */
   transform: translateX(10%);
   width: 80px;
@@ -741,7 +740,7 @@ button.modal_cnt_single_photo {
 }
 .photo-thumb-right {
   position: absolute;
-  bottom: 100%; 
+  bottom: 100%;
   /* left: 50%; */
   transform: translateX(-60%);
   width: 80px;
@@ -812,8 +811,8 @@ h3 {
     left: 0;
     width: 100%;
     background-color: white;
-    gap:0;
-}
+    gap: 0;
+  }
   .header-nav {
     display: none;
   }
@@ -864,11 +863,11 @@ h3 {
   .custom-flex {
     display: flex;
     flex-direction: column;
-}
-.custom-select{
-  margin-bottom: 15px;
-  width: 270px;
-}
+  }
+  .custom-select {
+    margin-bottom: 15px;
+    width: 270px;
+  }
   .photo-gallery {
     padding-top: 15px;
   }
@@ -877,7 +876,7 @@ h3 {
     height: 330px;
     padding: 10px;
   }
-  .photo-hover-overlay{
+  .photo-hover-overlay {
     display: none;
   }
   .footer-nav {
@@ -891,25 +890,25 @@ h3 {
   .lightbox-image-container {
     width: 300px;
     height: 400px;
-}
-.lightbox-prev {
-  left: 2px;
-}
-.lightbox-next {
-  display: flex;
-  font-size: 11px;
-  right: 5px;
-  flex-direction: column;
-}
-.lightbox-prev {
-  display: flex;
-  left: 2px;
-  flex-direction: column-reverse;
-  font-size: 11px;
-}
-.close-lightbox {
-  top: 5px;
-}
+  }
+  .lightbox-prev {
+    left: 2px;
+  }
+  .lightbox-next {
+    display: flex;
+    font-size: 11px;
+    right: 5px;
+    flex-direction: column;
+  }
+  .lightbox-prev {
+    display: flex;
+    left: 2px;
+    flex-direction: column-reverse;
+    font-size: 11px;
+  }
+  .close-lightbox {
+    top: 5px;
+  }
 
   /* ***single page*** */
   section#single-photo {

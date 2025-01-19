@@ -1,28 +1,31 @@
-<?php 
+<?php
 
 // Ajouter la prise en charge des images mises en avant
-add_theme_support( 'post-thumbnails' );
+add_theme_support('post-thumbnails');
 
 
 
 // Ajouter - FontAwesome
-function enqueue_font_awesome() {
+function enqueue_font_awesome()
+{
     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css', array(), null);
 }
 add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
 
 // Ajouter automatiquement le titre du site dans l'en-tête du site
-add_theme_support( 'title-tag' );
+add_theme_support('title-tag');
 
 // Ajout de la feuille du style
-function my_theme_enqueue_styles() {
+function my_theme_enqueue_styles()
+{
     wp_enqueue_style('theme-style', get_stylesheet_uri());
 }
 
 add_action('wp_enqueue_scripts', 'my_theme_enqueue_styles');
 
 // Ajout du script
-function mon_theme_enqueue_scripts() {
+function mon_theme_enqueue_scripts()
+{
     // Enqueue les styles et scripts nécessaires
     wp_enqueue_script('jquery'); // Assurez-vous que jQuery est chargé
     wp_enqueue_script('modal-script', get_template_directory_uri() . '/script/modal.js', array('jquery'), null, true);
@@ -30,7 +33,7 @@ function mon_theme_enqueue_scripts() {
     wp_enqueue_script('filtres-ajax-script', get_template_directory_uri() . '/script/filtres_ajax.js', array('jquery'), null, true);
     wp_enqueue_script('load-more-script', get_template_directory_uri() . '/script/load_more.js', array('jquery'), null, true);
     wp_enqueue_script('menu-burger-script', get_template_directory_uri() . '/script/menu-burger.js', array('jquery'), null, true);
-    
+
     // Localiser les données pour les scripts
     wp_localize_script('filtres-ajax-script', 'filtres_ajax_params', array(
         'ajax_url' => admin_url('admin-ajax.php'),
@@ -41,7 +44,7 @@ function mon_theme_enqueue_scripts() {
         'ajax_url' => admin_url('admin-ajax.php'),
         'nonce' => wp_create_nonce('load_more_nonce'),
         'template_url' => get_template_directory_uri(), // URL du répertoire du thème
-        
+
     ));
 }
 add_action('wp_enqueue_scripts', 'mon_theme_enqueue_scripts');
@@ -50,19 +53,22 @@ add_action('wp_enqueue_scripts', 'mon_theme_enqueue_scripts');
 
 
 // Ajout des emplacements menu
-function register_my_menus() {
-    register_nav_menus( array(
-        'header-menu' => __( 'Header Menu', 'text-domain' ), 
-        'footer-menu' => __( 'Footer Menu', 'text-domain' )  
+function register_my_menus()
+{
+    register_nav_menus(array(
+        'header-menu' => __('Header Menu', 'text-domain'),
+        'footer-menu' => __('Footer Menu', 'text-domain')
     ));
 }
-add_action( 'after_setup_theme', 'register_my_menus' );
+add_action('after_setup_theme', 'register_my_menus');
 
 // Modification du menu
-class Custom_Walker_Nav_Menu extends Walker_Nav_Menu {
-    
+class Custom_Walker_Nav_Menu extends Walker_Nav_Menu
+{
+
     // Commence l'élément (ajout des classes)
-    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0) {
+    function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
+    {
         // Récupérer les classes existantes de l'élément
         $classes = !empty($item->classes) ? implode(' ', $item->classes) : '';
 
@@ -88,13 +94,15 @@ class Custom_Walker_Nav_Menu extends Walker_Nav_Menu {
     }
 
     // Terminer l'élément (vide pour ne rien ajouter après chaque lien)
-    function end_el(&$output, $item, $depth = 0, $args = null) {
+    function end_el(&$output, $item, $depth = 0, $args = null)
+    {
         // Pas de fermeture particulière ici
     }
 }
 
 // ****HERO****
-function get_random_hero_image() {
+function get_random_hero_image()
+{
     // Initialiser les arguments de la requête pour le CPT "photo"
     $args = array(
         'post_type'      => 'photo', // Nom de votre Custom Post Type
@@ -137,10 +145,11 @@ function get_random_hero_image() {
 
 // **RECUPERER LE CHAMPDE REFERENCE**
 
-function get_reference() {
+function get_reference()
+{
     // Récupérer la valeur du champ SCF
     $reference = get_post_meta(get_the_ID(), 'reference', true);
-    
+
     // Retourner la valeur récupérée
     return $reference;
 }
@@ -151,7 +160,8 @@ add_shortcode('get_reference', 'get_reference');
 add_action('wp_ajax_filter_photos', 'filter_photos');
 add_action('wp_ajax_nopriv_filter_photos', 'filter_photos');
 
-function filter_photos() {
+function filter_photos()
+{
     // Récupérer les filtres envoyés
     $category = isset($_GET['category']) ? $_GET['category'] : '';
     $format = isset($_GET['format']) ? $_GET['format'] : '';
@@ -232,7 +242,8 @@ function filter_photos() {
 
 // ***LOAD MORE***
 
-function load_more_posts() {
+function load_more_posts()
+{
     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
     $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
     $format = isset($_GET['format']) ? $_GET['format'] : 'ALL';
@@ -282,7 +293,7 @@ function load_more_posts() {
             $posts[] = array(
                 'id'       => get_the_ID(),
                 'image'    => get_the_post_thumbnail_url(get_the_ID(), 'medium'), // Image miniature
-                'reference'=> get_post_meta(get_the_ID(), 'reference', true),    // Référence personnalisée
+                'reference' => get_post_meta(get_the_ID(), 'reference', true),    // Référence personnalisée
                 'category' => $category_name,
                 'link'     => get_permalink(get_the_ID()),                      // Lien vers la publication
             );
@@ -296,8 +307,3 @@ function load_more_posts() {
 }
 add_action('wp_ajax_load_more_posts', 'load_more_posts');
 add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
-
-
-
-  
-  

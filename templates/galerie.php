@@ -17,13 +17,13 @@ $photo_query = new WP_Query($args);
 if ($photo_query->have_posts()) :
     echo '<div class="photo-gallery">';
     while ($photo_query->have_posts()) : $photo_query->the_post();
-        ?>
-        
-            <?php
-            get_template_part('templates/photo_block'); // Charge le modèle pour chaque photo
-            ?>
+?>
 
         <?php
+        get_template_part('templates/photo_block'); // Charge le modèle pour chaque photo
+        ?>
+
+    <?php
     endwhile;
     echo '</div>';
 
@@ -34,8 +34,8 @@ if ($photo_query->have_posts()) :
     </div>
 
     <input type="hidden" name="page" value="<?php echo $paged; ?>" /> <!-- Champ caché pour la page -->
-    
-    <?php
+
+<?php
     wp_reset_postdata(); // Réinitialise les données de la requête
 else :
     echo 'Aucune photo disponible.';
