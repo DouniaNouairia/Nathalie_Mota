@@ -4,7 +4,6 @@ jQuery(document).ready(function ($) {
     const $container = $('.photo-gallery');
     let page = parseInt($('input[name="page"]').val(), 10) || 1;
 
-    // Fonction pour réinitialiser la lightbox et les événements de hover
     function resetLightboxAndHover() {
         $(".lightbox").off("click").on("click", function (e) {
             e.preventDefault();
@@ -26,9 +25,6 @@ jQuery(document).ready(function ($) {
                 $(this).find(".photo-hover-overlay").fadeOut(200);
             }
         );
-
-        // Mettre à jour la liste des images pour la lightbox
-        document.dispatchEvent(new Event("ajaxComplete"));
     }
 
     $loadMoreButton.on('click', function () {

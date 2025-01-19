@@ -586,8 +586,8 @@ button#load-more-btn:hover {
     bottom: 1%;
 }
 .photo-cat-lightbox {
-  font-family: 'Poppins';
-  font-weight: 500;
+  font-family: 'Space Mono';
+  font-weight: 400;
   color: white;
   position: fixed;
   right: 14.5%;

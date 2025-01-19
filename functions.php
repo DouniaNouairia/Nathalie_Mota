@@ -204,7 +204,7 @@ function filter_photos() {
             $query->the_post();
 
             // Récupérer la référence et la catégorie
-            $reference = get_post_meta(get_the_ID(), 'photo_reference', true);
+            $reference = get_post_meta(get_the_ID(), 'reference', true);
             $categories = get_the_terms(get_the_ID(), 'categorie');
             $category_name = $categories ? $categories[0]->name : ''; // Prendre la première catégorie
 
@@ -227,26 +227,26 @@ function filter_photos() {
 
 
 
+
+
+
 // ***LOAD MORE***
 
 function load_more_posts() {
-    // Obtenez les paramètres de la requête AJAX
     $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
     $category = isset($_GET['category']) ? $_GET['category'] : 'ALL';
     $format = isset($_GET['format']) ? $_GET['format'] : 'ALL';
     $dateSort = isset($_GET['dateSort']) ? $_GET['dateSort'] : 'ALL';
 
-    // Arguments de la requête pour charger plus de photos
     $args = array(
         'post_type' => 'photo',
-        'posts_per_page' => 8,   // Nombre de photos par page
-        'paged' => $page,        // Page actuelle
+        'posts_per_page' => 8,
+        'paged' => $page,
     );
 
-    // Filtrage des photos selon les paramètres
     if ($category !== 'ALL') {
         $args['tax_query'][] = array(
-            'taxonomy' => 'category',
+            'taxonomy' => 'categorie',
             'field'    => 'slug',
             'terms'    => $category,
         );
@@ -272,29 +272,26 @@ function load_more_posts() {
         while ($query->have_posts()) {
             $query->the_post();
 
-            // Ajout des champs "reference" et "category"
-            $reference = get_post_meta(get_the_ID(), 'reference', true); // Métadonnée "reference"
-            $categories = get_the_category(); // Catégories associées
-            $category_name = !empty($categories) ? $categories[0]->name : ''; // Première catégorie
+            $categories = get_the_terms(get_the_ID(), 'categorie');
+            $category_name = !empty($categories) && !is_wp_error($categories) ? $categories[0]->name : 'Sans catégorie';
 
             $posts[] = array(
                 'id'       => get_the_ID(),
                 'image'    => get_the_post_thumbnail_url(get_the_ID(), 'medium'),
-                // 'title'    => get_the_title(),
                 'reference'=> get_post_meta(get_the_ID(), 'reference', true),
-                'category' => !empty($categories) ? $categories[0]->name : 'Sans catégorie',
-                'link'     => get_permalink(get_the_ID()), // Lien vers la page single
+                'category' => $category_name,
+                'link'     => get_permalink(get_the_ID()),
             );
         }
     }
 
     wp_reset_postdata();
 
-    // Envoi des photos sous forme de JSON
     wp_send_json(array('posts' => $posts));
 }
 add_action('wp_ajax_load_more_posts', 'load_more_posts');
 add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
+
 
   
   

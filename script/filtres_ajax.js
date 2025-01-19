@@ -86,7 +86,7 @@ jQuery(document).ready(function ($) {
                 success: function (response) {
                     if (response.success) {
                         $(".photo-gallery").html(""); // Réinitialiser la galerie
-
+                
                         if (response.data.photos.length > 0) {
                             // Ajouter les nouvelles photos à la galerie
                             $.each(response.data.photos, function (index, photo) {
@@ -95,18 +95,18 @@ jQuery(document).ready(function ($) {
                                         <div class="photo-thumbnail">
                                             <a href="#" class="lightbox" 
                                                data-image="${photo.image}" 
-                                               data-reference="${photo.reference || 'Référence non définie'}" 
-                                               data-category="${photo.category || 'Sans catégorie'}">
+                                               data-reference="${photo.reference}" 
+                                               data-category="${photo.category}">
                                                 <img src="${photo.image}" alt="" />
                                             </a>
-
+                
                                             <!-- Overlay au survol -->
                                             <div class="photo-hover-overlay">
                                                 <!-- Icône "oeil" pour la page single -->
                                                 <a href="${photo.link}" class="photo-icon-center">
                                                     <img src="${wp_data.template_url}/assets/images/Icon_eye.png" alt="icône oeil">
                                                 </a>
-
+                
                                                 <!-- Icône "plein écran" pour la lightbox -->
                                                 <a href="javascript:void(0);" class="lightbox photo-icon-top-right"
                                                    data-image="${photo.image}"
@@ -114,7 +114,7 @@ jQuery(document).ready(function ($) {
                                                    data-category="${photo.category || 'Sans catégorie'}">
                                                     <img src="${wp_data.template_url}/assets/images/Fullscreen.png" alt="plein écran">
                                                 </a>
-
+                
                                                 <!-- Informations au survol -->
                                                 <div class="photo-info-hover">
                                                     <span class="photo-reference">${photo.reference || 'Référence non définie'}</span>
@@ -125,10 +125,10 @@ jQuery(document).ready(function ($) {
                                     </div>
                                 `);
                             });
-
+                
                             // Réinitialiser les styles d'image
                             resetImageStyles();
-
+                
                             // Initialiser le hover et la lightbox
                             resetLightboxAndHover();
                         } else {
@@ -138,6 +138,7 @@ jQuery(document).ready(function ($) {
                         $(".photo-gallery").html('<p>Une erreur est survenue. Veuillez réessayer.</p>');
                     }
                 },
+                
                 error: function (xhr, status, error) {
                     console.error(error);
                     $(".photo-gallery").html('<p>Une erreur est survenue lors de la récupération des photos.</p>');
