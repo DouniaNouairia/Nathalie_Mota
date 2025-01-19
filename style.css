@@ -556,11 +556,17 @@ button#load-more-btn:hover {
   visibility: visible;
   opacity: 1;
 }
-
+.lightbox-image-container {
+  width: 900px;
+  height: 520px;
+  overflow: hidden;
+}
 /* Image dans la Lightbox */
 #lightbox-image {
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Informations de la photo dans la Lightbox */
@@ -576,16 +582,16 @@ button#load-more-btn:hover {
   font-weight: 500;
   color: white;
   position: fixed;
-  left: 21%;
-  bottom: 3%;
+  left: 14.5%;
+    bottom: 1%;
 }
 .photo-cat-lightbox {
   font-family: 'Poppins';
   font-weight: 500;
   color: white;
   position: fixed;
-  right: 21.5%;
-  bottom: 3%;
+  right: 14.5%;
+    bottom: 1%;
 }
 /* Style des flèches */
 .lightbox-nav {

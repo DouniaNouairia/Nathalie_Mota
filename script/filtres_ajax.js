@@ -4,14 +4,14 @@ jQuery(document).ready(function ($) {
         function () {
             $(this).css({
                 'background-color': '#FFD6D6', // Couleur de fond au survol
-                'color': 'white'          // Couleur du texte au survol
+                'color': 'black'          // Couleur du texte au survol
             });
         },
         function () {
             if (!$(this).hasClass('selected')) {
                 $(this).css({
                     'background-color': '', // Réinitialisation de la couleur de fond
-                    'color': ''             // Réinitialisation de la couleur du texte
+                    'color': ''         // Réinitialisation de la couleur du texte
                 });
             }
         }
@@ -36,9 +36,9 @@ jQuery(document).ready(function ($) {
             'color': ''
         });
 
-        // Appliquer le style vert à l'option sélectionnée
+        // Appliquer le style rouge à l'option sélectionnée
         $(this).css({
-            'background-color': 'red', // Fond vert pour l'option sélectionnée
+            'background-color': 'red', // Fond rouge pour l'option sélectionnée
             'color': 'white'            // Texte blanc
         });
 
@@ -85,23 +85,40 @@ jQuery(document).ready(function ($) {
                 },
                 success: function (response) {
                     if (response.success) {
-                        $(".photo-gallery").html("");
+                        $(".photo-gallery").html(""); // Réinitialiser la galerie
 
                         if (response.data.photos.length > 0) {
+                            // Ajouter les nouvelles photos à la galerie
                             $.each(response.data.photos, function (index, photo) {
                                 $(".photo-gallery").append(`
                                     <div class="photo-item">
                                         <div class="photo-thumbnail">
                                             <a href="#" class="lightbox" 
                                                data-image="${photo.image}" 
-                                               data-reference="${photo.reference}" 
-                                               data-category="${photo.category}">
+                                               data-reference="${photo.reference || 'Référence non définie'}" 
+                                               data-category="${photo.category || 'Sans catégorie'}">
                                                 <img src="${photo.image}" alt="" />
                                             </a>
+
+                                            <!-- Overlay au survol -->
                                             <div class="photo-hover-overlay">
+                                                <!-- Icône "oeil" pour la page single -->
+                                                <a href="${photo.link}" class="photo-icon-center">
+                                                    <img src="${wp_data.template_url}/assets/images/Icon_eye.png" alt="icône oeil">
+                                                </a>
+
+                                                <!-- Icône "plein écran" pour la lightbox -->
+                                                <a href="javascript:void(0);" class="lightbox photo-icon-top-right"
+                                                   data-image="${photo.image}"
+                                                   data-reference="${photo.reference || 'Référence non définie'}"
+                                                   data-category="${photo.category || 'Sans catégorie'}">
+                                                    <img src="${wp_data.template_url}/assets/images/Fullscreen.png" alt="plein écran">
+                                                </a>
+
+                                                <!-- Informations au survol -->
                                                 <div class="photo-info-hover">
-                                                    <div class="photo-reference">${photo.reference}</div>
-                                                    <div class="photo-category">${photo.category}</div>
+                                                    <span class="photo-reference">${photo.reference || 'Référence non définie'}</span>
+                                                    <span class="photo-category">${photo.category || 'Sans catégorie'}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -113,7 +130,7 @@ jQuery(document).ready(function ($) {
                             resetImageStyles();
 
                             // Initialiser le hover et la lightbox
-                            initializeHoverAndLightbox();
+                            resetLightboxAndHover();
                         } else {
                             $(".photo-gallery").html('<p>Aucune photo trouvée pour ces critères.</p>');
                         }
@@ -137,35 +154,41 @@ jQuery(document).ready(function ($) {
         });
     }
 
-    // Initialiser le hover et la lightbox
-    function initializeHoverAndLightbox() {
-        console.log("initializeHoverAndLightbox appelé");
-
-        // Supprimer les gestionnaires précédents
-        $(".photo-thumbnail").off("mouseenter mouseleave");
-        $(".lightbox").off("click");
-
-        // Ajouter les événements hover
-        $(".photo-thumbnail").hover(
-            function () {
-                $(this).find(".photo-hover-overlay").stop(true, true).fadeIn(300);
-            },
-            function () {
-                $(this).find(".photo-hover-overlay").stop(true, true).fadeOut(300);
-            }
-        );
-
-        // Ajouter les événements pour ouvrir la lightbox
-        $(".lightbox").on("click", function (e) {
+    // Réinitialiser les événements pour le hover et la lightbox
+    function resetLightboxAndHover() {
+        // Réinitialiser les événements pour la lightbox
+        $(".lightbox").off("click").on("click", function (e) {
             e.preventDefault();
-            console.log("Lightbox cliquée");
+
+            const index = $(".lightbox").index(this); // Trouver l'index de l'élément cliqué
             const imageSrc = $(this).data("image");
             const reference = $(this).data("reference");
             const category = $(this).data("category");
 
-            openLightboxFromData(imageSrc, reference, category);
+            openLightboxFromData(imageSrc, reference, category, index);
         });
+
+        // Réinitialiser les événements pour le hover
+        $(".photo-thumbnail").off("mouseenter mouseleave").hover(
+            function () {
+                $(this).find(".photo-hover-overlay").fadeIn(200);
+            },
+            function () {
+                $(this).find(".photo-hover-overlay").fadeOut(200);
+            }
+        );
     }
+
+    // Ajouter les événements pour ouvrir la lightbox
+    $(".lightbox").on("click", function (e) {
+        e.preventDefault();
+        console.log("Lightbox cliquée");
+        const imageSrc = $(this).data("image");
+        const reference = $(this).data("reference");
+        const category = $(this).data("category");
+
+        openLightboxFromData(imageSrc, reference, category);
+    });
 
     // Appliquer les filtres à chaque changement
     $('.custom-select').on('change', function () {

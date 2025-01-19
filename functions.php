@@ -34,11 +34,14 @@ function mon_theme_enqueue_scripts() {
     // Localiser les données pour les scripts
     wp_localize_script('filtres-ajax-script', 'filtres_ajax_params', array(
         'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('filtres_ajax_nonce')
+        'nonce' => wp_create_nonce('filtres_ajax_nonce'),
+        'template_url' => get_template_directory_uri(), // URL du répertoire du thème
     ));
     wp_localize_script('load-more-script', 'wp_data', array(
         'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('load_more_nonce')
+        'nonce' => wp_create_nonce('load_more_nonce'),
+        'template_url' => get_template_directory_uri(), // URL du répertoire du thème
+        
     ));
 }
 add_action('wp_enqueue_scripts', 'mon_theme_enqueue_scripts');
@@ -149,6 +152,7 @@ add_action('wp_ajax_filter_photos', 'filter_photos');
 add_action('wp_ajax_nopriv_filter_photos', 'filter_photos');
 
 function filter_photos() {
+    // Récupérer les filtres envoyés
     $category = isset($_GET['category']) ? $_GET['category'] : '';
     $format = isset($_GET['format']) ? $_GET['format'] : '';
     $date = isset($_GET['date']) ? $_GET['date'] : '';
@@ -159,6 +163,7 @@ function filter_photos() {
         'tax_query' => array(),
     );
 
+    // Filtre par catégorie
     if ($category && $category !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'categorie',
@@ -167,6 +172,7 @@ function filter_photos() {
         );
     }
 
+    // Filtre par format
     if ($format && $format !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'format',
@@ -175,34 +181,50 @@ function filter_photos() {
         );
     }
 
+    // Relier les taxonomies avec "AND" si plusieurs taxonomies sont définies
     if (!empty($args['tax_query'])) {
         $args['tax_query']['relation'] = 'AND';
     }
 
+    // Filtre par date
     if ($date && $date !== 'ALL') {
         $args['orderby'] = 'date';
         $args['order'] = ($date === 'ASC') ? 'ASC' : 'DESC';
     }
 
+    // Effectuer la requête
     $query = new WP_Query($args);
 
+    // Tableau pour stocker les résultats
     $photos = array();
 
+    // Si des posts sont trouvés
     if ($query->have_posts()) {
         while ($query->have_posts()) {
             $query->the_post();
+
+            // Récupérer la référence et la catégorie
+            $reference = get_post_meta(get_the_ID(), 'photo_reference', true);
+            $categories = get_the_terms(get_the_ID(), 'categorie');
+            $category_name = $categories ? $categories[0]->name : ''; // Prendre la première catégorie
+
+            // Ajouter la photo au tableau
             $photos[] = array(
                 'image' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
-                'reference' => get_post_meta(get_the_ID(), 'photo_reference', true),
-                'category' => get_the_terms(get_the_ID(), 'categorie')[0]->name ?? '',
+                'reference' => $reference ?: 'Référence non définie', // Vérifier si la référence est vide
+                'category' => $category_name ?: 'Sans catégorie',   // Vérifier si la catégorie est vide
+                'link' => get_permalink(), // Ajouter le lien de la page de l'image
             );
         }
     }
 
+    // Réinitialiser les données après la requête
     wp_reset_postdata();
 
+    // Répondre avec les photos filtrées
     wp_send_json_success(array('photos' => $photos));
 }
+
 
 
 // ***LOAD MORE***
@@ -249,21 +271,30 @@ function load_more_posts() {
     if ($query->have_posts()) {
         while ($query->have_posts()) {
             $query->the_post();
+
+            // Ajout des champs "reference" et "category"
+            $reference = get_post_meta(get_the_ID(), 'reference', true); // Métadonnée "reference"
+            $categories = get_the_category(); // Catégories associées
+            $category_name = !empty($categories) ? $categories[0]->name : ''; // Première catégorie
+
             $posts[] = array(
-                'id'    => get_the_ID(),
-                'image' => get_the_post_thumbnail_url(get_the_ID(), 'medium'),
-                'title' => get_the_title(),
+                'id'       => get_the_ID(),
+                'image'    => get_the_post_thumbnail_url(get_the_ID(), 'medium'),
+                // 'title'    => get_the_title(),
+                'reference'=> get_post_meta(get_the_ID(), 'reference', true),
+                'category' => !empty($categories) ? $categories[0]->name : 'Sans catégorie',
+                'link'     => get_permalink(get_the_ID()), // Lien vers la page single
             );
         }
     }
 
     wp_reset_postdata();
 
-    wp_send_json(array('posts' => $posts)); // Envoi des photos sous forme de JSON
+    // Envoi des photos sous forme de JSON
+    wp_send_json(array('posts' => $posts));
 }
 add_action('wp_ajax_load_more_posts', 'load_more_posts');
 add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
-
 
   
   
