@@ -8,17 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const nextButton = document.querySelector(".lightbox-next");
     let currentIndex = -1;
 
-    // Récupération des images pour la lightbox
+    // Récupération des données des images
     function updateImageData() {
-        return Array.from(document.querySelectorAll(".lightbox")).map((img, index) => {
-            const src = img.getAttribute("data-image");
-            const reference = img.getAttribute("data-reference") || "Référence non définie";
-            const category = img.getAttribute("data-category") || "Catégorie non définie";
-
+        return Array.from(document.querySelectorAll(".lightbox")).map((img) => {
             return {
-                src: src,
-                reference: reference,
-                category: category,
+                src: img.getAttribute("data-image"),
+                reference: img.getAttribute("data-reference") || "Référence non définie",
+                category: img.getAttribute("data-category") || "Catégorie non définie",
             };
         });
     }
@@ -27,8 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Ouvrir la lightbox
     function openLightbox(index) {
-        if (index < 0 || index >= imageData.length) return;
+        if (index < 0) index = imageData.length - 1; // Boucle infinie
+        if (index >= imageData.length) index = 0; // Boucle infinie
         currentIndex = index;
+
         const { src, reference, category } = imageData[currentIndex];
 
         if (!src) {
@@ -49,53 +47,39 @@ document.addEventListener("DOMContentLoaded", function () {
         currentIndex = -1;
     }
 
-    // Afficher image précédente
+    // Afficher l'image précédente
     function showPrevImage() {
-        if (currentIndex > 0) {
-            openLightbox(currentIndex - 1);
-        }
+        openLightbox(currentIndex - 1);
     }
 
-    // Afficher image suivante
+    // Afficher l'image suivante
     function showNextImage() {
-        if (currentIndex < imageData.length - 1) {
-            openLightbox(currentIndex + 1);
-        }
+        openLightbox(currentIndex + 1);
     }
 
-    // Écouteurs d'événements
+    // Gestion des clics sur les miniatures
     document.addEventListener("click", function (e) {
-        if (e.target.classList.contains("lightbox")) {
-            const index = Array.from(document.querySelectorAll(".lightbox")).indexOf(e.target);
+        if (e.target.closest(".lightbox")) {
+            const index = Array.from(document.querySelectorAll(".lightbox")).indexOf(e.target.closest(".lightbox"));
             openLightbox(index);
         }
     });
 
-    closeLightbox.addEventListener("click", closeLightboxFunc);
-    prevButton.addEventListener("click", showPrevImage);
-    nextButton.addEventListener("click", showNextImage);
+    // Gestion des événements
+    if (closeLightbox) {
+        closeLightbox.addEventListener("click", closeLightboxFunc);
+    }
 
-    lightbox.addEventListener("click", (e) => {
-        if (e.target === lightbox) {
-            closeLightboxFunc();
-        }
-    });
+    if (prevButton) {
+        prevButton.addEventListener("click", showPrevImage);
+    }
 
-    // Mettre à jour les données d'images après filtrage
+    if (nextButton) {
+        nextButton.addEventListener("click", showNextImage);
+    }
+
+    // Mettre à jour les données après chargement ou filtrage
     document.addEventListener("ajaxComplete", function () {
         imageData = updateImageData();
     });
 });
-
-function openLightboxFromData(imageSrc, reference, category) {
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImage = document.getElementById("lightbox-image");
-    const photoReference = document.getElementById("photo-reference");
-    const photoCategory = document.getElementById("photo-category");
-
-    lightboxImage.src = imageSrc;
-    photoReference.textContent = reference || "Référence non définie";
-    photoCategory.textContent = category || "Catégorie non définie";
-
-    lightbox.classList.add("show");
-}
