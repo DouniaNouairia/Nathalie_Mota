@@ -91,56 +91,33 @@ jQuery(document).ready(function ($) {
               // Ajouter les nouvelles photos à la galerie
               $.each(response.data.photos, function (index, photo) {
                 $(".photo-gallery").append(`
-                                    <div class="photo-item">
-                                        <div class="photo-thumbnail">
-                                            <a href="#" class="lightbox" 
-                                               data-image="${photo.image}" 
-                                               data-reference="${
-                                                 photo.reference
-                                               }" 
-                                               data-category="${
-                                                 photo.category
-                                               }">
-                                                <img src="${
-                                                  photo.image
-                                                }" alt="" />
-                                            </a>
-                                            <div class="photo-hover-overlay">
-                                                <a href="${
-                                                  photo.link
-                                                }" class="photo-icon-center">
-                                                    <img src="${
-                                                      wp_data.template_url
-                                                    }/assets/images/Icon_eye.png" alt="icône oeil">
-                                                </a>
-                                                <a href="javascript:void(0);" class="lightbox photo-icon-top-right"
-                                                   data-image="${photo.image}"
-                                                   data-reference="${
-                                                     photo.reference ||
-                                                     "Référence non définie"
-                                                   }"
-                                                   data-category="${
-                                                     photo.category ||
-                                                     "Sans catégorie"
-                                                   }">
-                                                    <img src="${
-                                                      wp_data.template_url
-                                                    }/assets/images/Fullscreen.png" alt="plein écran">
-                                                </a>
-                                                <div class="photo-info-hover">
-                                                    <span class="photo-reference">${
-                                                      photo.reference ||
-                                                      "Référence non définie"
-                                                    }</span>
-                                                    <span class="photo-category">${
-                                                      photo.category ||
-                                                      "Sans catégorie"
-                                                    }</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `);
+                  <div class="photo-item">
+                      <div class="photo-thumbnail">
+                          <a href="#" class="lightbox" 
+                             data-image="${photo.image}" 
+                             data-reference="${photo.reference}" 
+                             data-category="${photo.category}">
+                              <img src="${photo.image}" alt="${photo.title}" />
+                          </a>
+                          <div class="photo-hover-overlay">
+                              <a href="${photo.link}" class="photo-icon-center">
+                                  <img src="${wp_data.template_url}/assets/images/Icon_eye.png" alt="icône oeil">
+                              </a>
+                              <a href="javascript:void(0);" class="lightbox photo-icon-top-right"
+                                 data-image="${photo.image}"
+                                 data-reference="${photo.reference || 'Référence non définie'}"
+                                 data-category="${photo.category || 'Sans catégorie'}">
+                                  <img src="${wp_data.template_url}/assets/images/Fullscreen.png" alt="plein écran">
+                              </a>
+                              <div class="photo-info-hover">
+                                  <!-- Afficher le titre dans le hover -->
+                                  <span class="photo-title">${photo.title || 'Titre non défini'}</span>
+                                  <span class="photo-category">${photo.category || 'Sans catégorie'}</span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                `);
               });
 
               // Réinitialiser les événements

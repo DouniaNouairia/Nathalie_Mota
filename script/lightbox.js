@@ -8,13 +8,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const nextButton = document.querySelector(".lightbox-next");
   let currentIndex = -1;
 
-  // Récupération des données des images
+  // Fonction pour mettre à jour les données des images
   function updateImageData() {
     return Array.from(document.querySelectorAll(".lightbox")).map((img) => {
       return {
         src: img.getAttribute("data-image"),
-        reference:
-          img.getAttribute("data-reference") || "Référence non définie",
+        reference: img.getAttribute("data-reference") || "Référence non définie",
         category: img.getAttribute("data-category") || "Catégorie non définie",
       };
     });
@@ -22,18 +21,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let imageData = updateImageData();
 
-  // Ouvrir la lightbox
+  // Fonction pour ouvrir la lightbox
   window.openLightbox = function (index, lightboxElements) {
-    if (index < 0) index = lightboxElements.length - 1; // Boucle infinie
-    if (index >= lightboxElements.length) index = 0; // Boucle infinie
+    if (index < 0) index = lightboxElements.length - 1;
+    if (index >= lightboxElements.length) index = 0;
     currentIndex = index;
 
     const currentElement = lightboxElements[index];
     const src = currentElement.getAttribute("data-image");
-    const reference =
-      currentElement.getAttribute("data-reference") || "Référence non définie";
-    const category =
-      currentElement.getAttribute("data-category") || "Catégorie non définie";
+    const reference = currentElement.getAttribute("data-reference") || "Référence non définie";
+    const category = currentElement.getAttribute("data-category") || "Catégorie non définie";
 
     if (!src) {
       console.error("Aucune image valide à afficher.");
@@ -41,13 +38,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     lightboxImage.src = src;
-    photoReference.textContent = reference;
-    photoCategory.textContent = category;
+    photoReference.textContent = reference; // Affiche la référence
+    photoCategory.textContent = category; // Affiche la catégorie
 
     lightbox.classList.add("show");
   };
 
-  // Fermer la lightbox
+  // Fonction pour fermer la lightbox
   function closeLightboxFunc() {
     lightbox.classList.remove("show");
     currentIndex = -1;
@@ -68,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (e.target.closest(".lightbox")) {
       const filteredLightboxElements = Array.from(
         document.querySelectorAll(".lightbox")
-      ); // Obtenir les lightboxes visibles
+      );
       const index = filteredLightboxElements.indexOf(
         e.target.closest(".lightbox")
       );
@@ -76,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Gestion des événements
+  // Evénements de fermeture et navigation
   if (closeLightbox) {
     closeLightbox.addEventListener("click", closeLightboxFunc);
   }
@@ -99,9 +96,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Mettre à jour les données après un filtrage
+  // Rafraîchissement des données après un filtrage AJAX
   document.addEventListener("ajaxComplete", function () {
-    imageData = updateImageData(); // Rafraîchit les données
+    imageData = updateImageData();
     console.log("Données de la lightbox mises à jour :", imageData);
   });
 });

@@ -24,12 +24,13 @@
 
             <!-- Informations sur la photo -->
             <div class="photo-info-hover">
-                <span class="photo-reference"><?php echo esc_html(get_post_meta(get_the_ID(), 'reference', true)); ?></span>
-                <span class="photo-category"><?php
-                                                $categories = get_the_terms(get_the_ID(), 'categorie');
-                                                echo !empty($categories) && !is_wp_error($categories) ? esc_html($categories[0]->name) : 'Sans catégorie';
-                                                ?></span>
-            </div>
+    <span class="photo-title"><?php echo esc_html(get_the_title(get_the_ID())); ?></span>
+    <span class="photo-category"><?php
+        $categories = get_the_terms(get_the_ID(), 'categorie');
+        echo !empty($categories) && !is_wp_error($categories) ? esc_html($categories[0]->name) : 'Sans catégorie';
+    ?></span>
+</div>
+
         </div>
     </div>
 </div>

@@ -9,7 +9,7 @@ get_header();
             <div class="single-photo-wrapper">
                 <!-- Bloc de métadonnées et image -->
                 <div class="single-photo-meta">
-                    <h2 class="photo-title"><?php the_title(); ?></h2>
+                    <h2><?php the_title(); ?></h2>
                     <?php
                     $reference = get_post_meta(get_the_ID(), 'reference', true);
                     $type = get_post_meta(get_the_ID(), 'type', true);

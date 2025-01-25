@@ -6,11 +6,11 @@ add_theme_support('post-thumbnails');
 
 
 // Ajouter - FontAwesome
-function enqueue_font_awesome()
-{
-    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css', array(), null);
-}
-add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
+// function enqueue_font_awesome()
+// {
+//     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css', array(), null);
+// }
+// add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
 
 // Ajouter automatiquement le titre du site dans l'en-tête du site
 add_theme_support('title-tag');
@@ -113,7 +113,6 @@ function get_random_hero_image()
     // Effectuer la requête
     $query = new WP_Query($args);
 
-    // Tableau pour stocker les URLs des images
     $images = array();
 
     // Parcourir les posts et récupérer les images à la une
@@ -162,7 +161,6 @@ add_action('wp_ajax_nopriv_filter_photos', 'filter_photos');
 
 function filter_photos()
 {
-    // Récupérer les filtres envoyés
     $category = isset($_GET['category']) ? $_GET['category'] : '';
     $format = isset($_GET['format']) ? $_GET['format'] : '';
     $date = isset($_GET['date']) ? $_GET['date'] : '';
@@ -173,7 +171,6 @@ function filter_photos()
         'tax_query' => array(),
     );
 
-    // Filtre par catégorie
     if ($category && $category !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'categorie',
@@ -182,7 +179,6 @@ function filter_photos()
         );
     }
 
-    // Filtre par format
     if ($format && $format !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'format',
@@ -191,56 +187,46 @@ function filter_photos()
         );
     }
 
-    // Relier les taxonomies avec "AND" si plusieurs taxonomies sont définies
     if (!empty($args['tax_query'])) {
         $args['tax_query']['relation'] = 'AND';
     }
 
-    // Filtre par date
     if ($date && $date !== 'ALL') {
         $args['orderby'] = 'date';
         $args['order'] = ($date === 'ASC') ? 'ASC' : 'DESC';
     }
 
-    // Effectuer la requête
     $query = new WP_Query($args);
 
-    // Tableau pour stocker les résultats
     $photos = array();
 
-    // Si des posts sont trouvés
     if ($query->have_posts()) {
         while ($query->have_posts()) {
             $query->the_post();
-
-            // Récupérer la référence et la catégorie
-            $reference = get_post_meta(get_the_ID(), 'reference', true);
             $categories = get_the_terms(get_the_ID(), 'categorie');
-            $category_name = $categories ? $categories[0]->name : ''; // Prendre la première catégorie
+            $category_name = $categories ? $categories[0]->name : '';
 
-            // Ajouter la photo au tableau
+            // Ici, ajouter la référence (utilisation de get_the_ID() comme référence)
             $photos[] = array(
                 'image' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
-                'reference' => $reference ?: 'Référence non définie', // Vérifier si la référence est vide
+                 'reference' => get_post_meta(get_the_ID(), 'reference', true),
+                'title' => get_the_title() ?: 'Titre non défini',
                 'category' => $category_name ?: 'Sans catégorie',   // Vérifier si la catégorie est vide
                 'link' => get_permalink(), // Ajouter le lien de la page de l'image
             );
         }
     }
 
-    // Réinitialiser les données après la requête
     wp_reset_postdata();
 
-    // Répondre avec les photos filtrées
     wp_send_json_success(array('photos' => $photos));
 }
 
 
-
-
-
-
 // ***LOAD MORE***
+
+add_action('wp_ajax_load_more_posts', 'load_more_posts');
+add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
 
 function load_more_posts()
 {
@@ -255,7 +241,6 @@ function load_more_posts()
         'paged' => $page,
     );
 
-    // Filtrer par catégorie si défini
     if ($category !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'categorie',
@@ -264,7 +249,6 @@ function load_more_posts()
         );
     }
 
-    // Filtrer par format si défini
     if ($format !== 'ALL') {
         $args['tax_query'][] = array(
             'taxonomy' => 'format',
@@ -273,7 +257,6 @@ function load_more_posts()
         );
     }
 
-    // Trier par date si défini
     if ($dateSort !== 'ALL') {
         $args['orderby'] = 'date';
         $args['order'] = ($dateSort === 'ASC') ? 'ASC' : 'DESC';
@@ -282,17 +265,17 @@ function load_more_posts()
     $query = new WP_Query($args);
     $posts = array();
 
-    // Préparer les données pour la réponse JSON
     if ($query->have_posts()) {
         while ($query->have_posts()) {
             $query->the_post();
-
             $categories = get_the_terms(get_the_ID(), 'categorie');
-            $category_name = !empty($categories) && !is_wp_error($categories) ? $categories[0]->name : 'Sans catégorie';
+            $category_name = !empty($categories) ? $categories[0]->name : 'Sans catégorie';
 
+            // On ajoute aussi ici la référence
             $posts[] = array(
                 'id'       => get_the_ID(),
                 'image'    => get_the_post_thumbnail_url(get_the_ID(), 'medium'), // Image miniature
+                'title'    => get_the_title(),
                 'reference' => get_post_meta(get_the_ID(), 'reference', true),    // Référence personnalisée
                 'category' => $category_name,
                 'link'     => get_permalink(get_the_ID()),                      // Lien vers la publication
@@ -302,8 +285,5 @@ function load_more_posts()
 
     wp_reset_postdata();
 
-    // Retourner les données au format JSON
     wp_send_json(array('posts' => $posts));
 }
-add_action('wp_ajax_load_more_posts', 'load_more_posts');
-add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
