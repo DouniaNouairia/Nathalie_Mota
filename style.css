@@ -65,6 +65,14 @@ Tags: photographie, portfolio, responsive
 body {
   margin: auto;
 }
+/* .header {
+  z-index: 1000;
+  display: flex;
+  justify-content: space-around;
+  gap: 20%;
+  padding: 28px;
+  box-shadow: 0px 4px 14px 10px #00000008;
+} */
 .header {
   z-index: 1000;
   display: flex;
@@ -72,6 +80,7 @@ body {
   gap: 20%;
   padding: 28px;
   box-shadow: 0px 4px 14px 10px #00000008;
+  background-color: white;
 }
 .header-nav-item,
 .footer-nav-item {
@@ -82,7 +91,6 @@ body {
   color: black;
   padding: 5px 25px;
   text-decoration: none;
- 
 }
 .header-nav-item:hover,
 .footer-nav-item:hover {
@@ -97,6 +105,16 @@ body {
   border-top: solid 1px black;
 }
 
+/* .burger-menu {
+  display: none;
+}
+
+.burger-menu img {
+  width: 30px;
+  height: auto;
+  cursor: pointer;
+} */
+/* Menu burger (mobile uniquement) */
 .burger-menu {
   display: none;
 }
@@ -105,28 +123,73 @@ body {
   width: 30px;
   height: auto;
   cursor: pointer;
+  margin-right: 45px;
 }
 
 /* OVERLAY DU MENU BURGER */
-.mobile-menu-overlay {
+/* .mobile-menu-overlay {
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: #e00000; /* Fond rouge */
-  z-index: 999; /* Sous le header */
-  display: none; /* Caché par défaut */
+  background-color: #e00000; 
+  z-index: 999; 
+  display: none; 
   justify-content: center;
   align-items: center;
-  overflow-y: auto; /* Permet de scroller si le contenu dépasse */
+  overflow-y: auto; 
+} */
+/* Overlay du menu mobile */
+.mobile-menu-overlay {
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  right: -100%; /* L'overlay commence hors de l'écran */
+  width: 100vw;
+  height: 100%;
+  background-color: #e00000;
+  z-index: 2000; /* Au-dessus de tout, y compris le header */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto; /* Permet le scroll si le contenu dépasse */
+  transition: right 0.4s ease; /* Animation de slide */
 }
-
-/* OVERLAY ACTIF */
 .mobile-menu-overlay.active {
-  display: flex; /* Rend l'overlay visible */
+  right: 0; /* Fait glisser l'overlay dans la vue */
+  opacity: 1;
 }
+/* .menu-overlay-header {
+  display: flex;
+  background-color: white;
+  width: 100vw;
+  height: 15vh;
+  justify-content: space-around;
+  align-items: center;
+  top: 0;
+  right: 0;
+  position: absolute;
+} */
+.menu-overlay-header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  padding: 25px;
+  background-color: white;
+  position: absolute;
+  top: 0;
+}
+.menu-overlay-header img {
+  cursor: pointer;
+}
+/* OVERLAY ACTIF */
+/* .mobile-menu-overlay.active {
+  display: flex; 
+} */
 
 /* CONTENU DU MENU */
-.mobile-menu-content {
+/* .mobile-menu-content {
   text-align: center;
   width: 100%;
   padding: 20px;
@@ -153,25 +216,64 @@ body {
 
 .mobile-nav-list li a:hover {
   color: black;
+} */
+.mobile-menu-content {
+  margin-top: 15vh; /* Espace pour le header de l'overlay */
+  width: 100%;
+  text-align: center;
+}
+
+.mobile-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobile-nav-list li {
+  margin: 20px 0;
+}
+
+.mobile-nav-list li a {
+  text-decoration: none;
+  font-size: 30px;
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.mobile-nav-list li a:hover {
+  color: black;
 }
 
 /* ICÔNE BURGER/FERMETURE */
+/* .Burger-open {
+  display: inline;
+}
+
+.Burger-close {
+  width: 30px;
+  height: 30px;
+  display: none;
+} */
 .Burger-open {
   display: inline;
 }
 
 .Burger-close {
   display: none;
+  width: 30px;
+  height: auto;
 }
-
 /* AFFICHAGE DE LA CROIX QUAND LE MENU EST ACTIF */
-.mobile-menu-overlay.active ~ .header .burger-menu .Burger-open {
+/* .mobile-menu-overlay.active ~ .header .burger-menu .Burger-open {
   display: none; 
 }
 
 .mobile-menu-overlay.active ~ .header .burger-menu .Burger-close {
   display: inline; 
-}
+} */
+
 /* Modal */
 .contact-modal {
   display: flex;
@@ -249,7 +351,7 @@ input#reference {
 textarea.wpcf7-form-control.wpcf7-textarea {
   border: solid 1px #b8bbc2;
   border-radius: 8px;
-  height: 150px;
+  height: 120px;
 }
 
 input.wpcf7-form-control.wpcf7-submit.has-spinner {
@@ -358,22 +460,22 @@ h1 {
 }
 
 .custom-select .selected-option::after {
-  content: ""; /* Supprime la flèche par défaut */
+  content: "";
   position: absolute;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  width: 16px; /* Ajustez la largeur de l'image */
-  height: 16px; /* Ajustez la hauteur de l'image */
-  background-image: url("assets/images/chevron-down.png"); /* Chemin de votre image */
-  background-size: contain; /* Ajuste la taille pour couvrir l'espace */
-  background-repeat: no-repeat; /* Évite la répétition */
-  background-position: center; /* Centrage de l'image */
+  width: 16px;
+  height: 16px;
+  background-image: url("assets/images/chevron-down.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 /* Liste des options */
 .options-list {
-  list-style-type: none; /* Supprime les puces */
+  list-style-type: none;
   margin: 0;
   padding: 0;
   display: none;
@@ -381,10 +483,10 @@ h1 {
   top: 100%; /* Juste en dessous de l'élément sélectionné */
   left: 0;
   width: 100%;
-  background-color: white; /* Fond blanc */
+  background-color: white;
   border: 1px solid #b8bbc2;
   border-radius: 8px;
-  z-index: 1000; /* Assurez-vous qu'elle soit au-dessus des autres éléments */
+  z-index: 1000;
   max-height: 200px;
   overflow-y: auto;
 }
@@ -440,7 +542,7 @@ button#load-more-btn:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Fond noir transparent */
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -524,12 +626,12 @@ button#load-more-btn:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8); /* Fond noir avec 80% de transparence */
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* S'assurer que la lightbox apparaît au-dessus de tout le reste */
-  visibility: hidden; /* La lightbox est cachée par défaut */
+  z-index: 1000;
+  visibility: hidden;
   opacity: 0;
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
@@ -601,12 +703,10 @@ button#load-more-btn:hover {
   gap: 10%;
 }
 
-/* Espacement entre l'icône et le texte */
 .lightbox-nav i {
   margin-right: 5px;
 }
 
-/* Croix pour fermer la Lightbox */
 .close-lightbox {
   position: absolute;
   right: 20px;
@@ -750,7 +850,7 @@ button.modal_cnt_single_photo {
   opacity: 0.5;
 }
 
-/* **relatead post** */
+/* Photo apparentées */
 h3 {
   font-family: Space Mono;
   font-weight: 400;
@@ -781,7 +881,7 @@ h3 {
 }
 
 @media only screen and (max-width: 480px) {
-  .burger-menu {
+  /* .burger-menu {
     display: block;
   }
   .header {
@@ -801,6 +901,21 @@ h3 {
   }
   .header {
     align-items: center;
+  } */
+  .burger-menu {
+    display: block; /* Affiche le menu burger */
+  }
+
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+  }
+
+  .header-nav {
+    display: none;
   }
   .modal-content {
     max-width: 80%;
@@ -890,6 +1005,12 @@ h3 {
     left: 2px;
     flex-direction: column-reverse;
     font-size: 11px;
+  }
+  .photo-ref-lightbox {
+    bottom: 3%;
+  }
+  .photo-cat-lightbox {
+    bottom: 3%;
   }
   .close-lightbox {
     top: 5px;

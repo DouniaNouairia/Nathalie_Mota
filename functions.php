@@ -209,7 +209,7 @@ function filter_photos()
             // Ici, ajouter la référence (utilisation de get_the_ID() comme référence)
             $photos[] = array(
                 'image' => get_the_post_thumbnail_url(get_the_ID(), 'thumbnail'),
-                 'reference' => get_post_meta(get_the_ID(), 'reference', true),
+                'reference' => get_post_meta(get_the_ID(), 'reference', true),
                 'title' => get_the_title() ?: 'Titre non défini',
                 'category' => $category_name ?: 'Sans catégorie',   // Vérifier si la catégorie est vide
                 'link' => get_permalink(), // Ajouter le lien de la page de l'image
