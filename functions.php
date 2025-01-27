@@ -3,15 +3,6 @@
 // Ajouter la prise en charge des images mises en avant
 add_theme_support('post-thumbnails');
 
-
-
-// Ajouter - FontAwesome
-// function enqueue_font_awesome()
-// {
-//     wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css', array(), null);
-// }
-// add_action('wp_enqueue_scripts', 'enqueue_font_awesome');
-
 // Ajouter automatiquement le titre du site dans l'en-tête du site
 add_theme_support('title-tag');
 

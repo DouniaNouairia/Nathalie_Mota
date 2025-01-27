@@ -15,19 +15,13 @@ jQuery(document).ready(function ($) {
         openLightbox(index, filteredLightboxElements);
       });
 
-    $(".photo-gallery").on(
-      "mouseenter",
-      ".photo-thumbnail",
-      function () {
+    $(".photo-gallery")
+      .on("mouseenter", ".photo-thumbnail", function () {
         $(this).find(".photo-hover-overlay").fadeIn(200);
-      }
-    ).on(
-      "mouseleave",
-      ".photo-thumbnail",
-      function () {
+      })
+      .on("mouseleave", ".photo-thumbnail", function () {
         $(this).find(".photo-hover-overlay").fadeOut(200);
-      }
-    );
+      });
   }
 
   $loadMoreButton.on("click", function () {
@@ -43,9 +37,9 @@ jQuery(document).ready(function ($) {
         data: {
           action: "load_more_posts",
           page: page,
-          category: $('#category-filter .selected-option').data('value'),
-          format: $('#format-filter .selected-option').data('value'),
-          dateSort: $('#date-filter .selected-option').data('value'),
+          category: $("#category-filter .selected-option").data("value"),
+          format: $("#format-filter .selected-option").data("value"),
+          dateSort: $("#date-filter .selected-option").data("value"),
         },
         success: function (response) {
           if (response && response.posts) {
@@ -57,7 +51,9 @@ jQuery(document).ready(function ($) {
                           <img src="${post.image}" alt="${post.title}" />
                           <div class="photo-hover-overlay">
                               <a href="${post.link}" class="photo-icon-center">
-                                  <img src="${wp_data.template_url}/assets/images/Icon_eye.png" alt="icône oeil">
+                                  <img src="${
+                                    wp_data.template_url
+                                  }/assets/images/Icon_eye.png" alt="icône oeil">
                               </a>
                               <a href="javascript:void(0);" class="lightbox photo-icon-top-right"
                                                data-image="${post.image}"
@@ -74,8 +70,12 @@ jQuery(document).ready(function ($) {
                                                 }/assets/images/Fullscreen.png" alt="plein écran">
                                             </a>
                               <div class="photo-info-hover">
-                                  <span class="photo-title">${post.title || 'Titre non défini'}</span>
-                                  <span class="photo-category">${post.category || 'Sans catégorie'}</span>
+                                  <span class="photo-title">${
+                                    post.title || "Titre non défini"
+                                  }</span>
+                                  <span class="photo-category">${
+                                    post.category || "Sans catégorie"
+                                  }</span>
                               </div>
                           </div>
                       </div>

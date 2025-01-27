@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
     return Array.from(document.querySelectorAll(".lightbox")).map((img) => {
       return {
         src: img.getAttribute("data-image"),
-        reference: img.getAttribute("data-reference") || "Référence non définie",
+        reference:
+          img.getAttribute("data-reference") || "Référence non définie",
         category: img.getAttribute("data-category") || "Catégorie non définie",
       };
     });
@@ -29,8 +30,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const currentElement = lightboxElements[index];
     const src = currentElement.getAttribute("data-image");
-    const reference = currentElement.getAttribute("data-reference") || "Référence non définie";
-    const category = currentElement.getAttribute("data-category") || "Catégorie non définie";
+    const reference =
+      currentElement.getAttribute("data-reference") || "Référence non définie";
+    const category =
+      currentElement.getAttribute("data-category") || "Catégorie non définie";
 
     if (!src) {
       console.error("Aucune image valide à afficher.");
