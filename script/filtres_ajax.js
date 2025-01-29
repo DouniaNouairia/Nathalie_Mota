@@ -1,17 +1,41 @@
 jQuery(document).ready(function ($) {
-  // Appliquer un style hover pour les options
+  var hoverTimeout; // Variable pour stocker le setTimeout
+
+  // Appliquer un style sur le survol des options
   $(".custom-select .option").hover(
     function () {
-      $(this).css({
-        "background-color": "#FFD6D6", // Couleur de fond au survol
-        color: "black", // Couleur du texte au survol
-      });
+      var option = $(this);
+
+      if (!option.hasClass("selected") && !option.hasClass("pressed")) {
+        option.css({
+          "background-color": "#FFD6D6",
+          color: "#313144",
+        });
+      }
+
+      // Démarrer un délai de 300ms avant de changer l'état de l'option
+      hoverTimeout = setTimeout(function () {
+        // Si l'option n'est pas sélectionnée ni déjà pressée
+        if (!option.hasClass("selected")) {
+          option.addClass("pressed");
+          option.css({
+            "background-color": "#FE5858",
+            color: "#313144",
+          });
+        }
+      }, 200);
     },
     function () {
-      if (!$(this).hasClass("selected")) {
-        $(this).css({
-          "background-color": "", // Réinitialisation de la couleur de fond
-          color: "", // Réinitialisation de la couleur du texte
+      // Annuler le délai si on quitte l'option avant le délai
+      clearTimeout(hoverTimeout);
+      var option = $(this);
+
+      // Réinitialiser la couleur si l'option n'est pas sélectionnée
+      if (!option.hasClass("selected")) {
+        option.removeClass("pressed");
+        option.css({
+          "background-color": "",
+          color: "",
         });
       }
     }
@@ -21,25 +45,29 @@ jQuery(document).ready(function ($) {
   $(".custom-select .option").on("click", function () {
     var value = $(this).data("value");
     var text = $(this).text();
+    var selectContainer = $(this).closest(".custom-select");
 
     // Mettre à jour l'affichage de l'option sélectionnée
-    var selectContainer = $(this).closest(".custom-select");
     selectContainer.find(".selected-option").text(text);
     selectContainer.find(".selected-option").data("value", value);
 
     // Ajouter la classe "selected" à l'option cliquée et la retirer des autres
-    $(this).addClass("selected").siblings().removeClass("selected");
+    $(this)
+      .addClass("selected")
+      .removeClass("pressed")
+      .siblings()
+      .removeClass("selected pressed");
 
-    // Réinitialiser les styles des autres options
-    $(this).siblings().css({
-      "background-color": "",
-      color: "",
-    });
-
-    // Appliquer le style rouge à l'option sélectionnée
+    // Appliquer la couleur spécifique pour la sélection (par exemple, rouge)
     $(this).css({
       "background-color": "red",
       color: "white",
+    });
+
+    // Réinitialiser les autres options
+    $(this).siblings().css({
+      "background-color": "",
+      color: "",
     });
 
     // Fermer la liste déroulante après la sélection

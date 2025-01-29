@@ -43,7 +43,7 @@ get_header();
                     <?php if (has_post_thumbnail()) : ?>
                         <?php the_post_thumbnail('large', ['class' => 'photo-full']); ?>
                     <?php else : ?>
-                        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/default-photo.jpg" alt="Image par défaut" class="photo-full">
+                        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/coming-soon.jpg" alt="Image par défaut" class="photo-full">
                     <?php endif; ?>
                 </div>
             </div>

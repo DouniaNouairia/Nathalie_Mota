@@ -4,6 +4,9 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Photographe événementiel professionnelle offrant des services de photographie pour mariages, événements d'entreprise, et autres occasions spéciales. Capturer les moments précieux pour toujours.">
+    <meta name="keywords" content="photographe événementiel, photographie mariage, photographe professionnel, photographie entreprise, photographie événements, photographie photojournalisme, photographe pour mariage, photographe pour événements">
+    <meta name="author" content="Nathalie Mota" />
     <?php wp_head(); ?>
 </head>
 

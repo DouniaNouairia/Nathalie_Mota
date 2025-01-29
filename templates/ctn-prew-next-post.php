@@ -33,7 +33,7 @@
 
         // Flèche gauche (précédente)
         if ($prev_post) :
-            $prev_thumb = get_the_post_thumbnail_url($prev_post->ID, 'thumbnail') ?: get_template_directory_uri() . '/assets/images/default-photo.jpg';
+            $prev_thumb = get_the_post_thumbnail_url($prev_post->ID, 'thumbnail') ?: get_template_directory_uri() . '/assets/images/coming-soon.jpg';
         ?>
             <a href="<?php echo esc_url(get_permalink($prev_post->ID)); ?>" class="photo-prev" title="<?php echo esc_attr(get_the_title($prev_post->ID)); ?>">
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/images/Left-hover.png" alt="fleche gauche">
@@ -43,7 +43,7 @@
 
         <!-- Flèche droite (suivante) -->
         <?php if ($next_post) :
-            $next_thumb = get_the_post_thumbnail_url($next_post->ID, 'thumbnail') ?: get_template_directory_uri() . '/assets/images/default-photo.jpg';
+            $next_thumb = get_the_post_thumbnail_url($next_post->ID, 'thumbnail') ?: get_template_directory_uri() . '/assets/images/coming-soon.jpg';
         ?>
             <a href="<?php echo esc_url(get_permalink($next_post->ID)); ?>" class="photo-next" title="<?php echo esc_attr(get_the_title($next_post->ID)); ?>">
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/images/Right-hover.png" alt="fleche droite">

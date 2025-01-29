@@ -1,3 +1,4 @@
+// LIGHTBOX SANS OUVERTURE SUR CLIC MINIATURE
 document.addEventListener("DOMContentLoaded", function () {
   const lightbox = document.getElementById("lightbox");
   const lightboxImage = document.getElementById("lightbox-image");
@@ -62,19 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function showNextImage(lightboxElements) {
     openLightbox(currentIndex + 1, lightboxElements);
   }
-
-  // Gestion des clics sur les miniatures
-  document.addEventListener("click", function (e) {
-    if (e.target.closest(".lightbox")) {
-      const filteredLightboxElements = Array.from(
-        document.querySelectorAll(".lightbox")
-      );
-      const index = filteredLightboxElements.indexOf(
-        e.target.closest(".lightbox")
-      );
-      openLightbox(index, filteredLightboxElements);
-    }
-  });
 
   // Evénements de fermeture et navigation
   if (closeLightbox) {

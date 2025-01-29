@@ -611,7 +611,10 @@ button#load-more-btn:hover {
   left: 20px;
   gap: 10%;
 }
-
+.lightbox-prev:hover, .lightbox-next:hover {
+  font-weight: bold;
+  scale: 1.15;
+}
 .lightbox-next {
   right: 20px;
   gap: 10%;
@@ -708,6 +711,7 @@ button.modal_cnt_single_photo {
   border: none;
   border-radius: 2px;
   padding: 12px 80px;
+  cursor: pointer;
 }
 
 .arrows {

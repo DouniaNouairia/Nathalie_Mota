@@ -135,15 +135,15 @@ function get_random_hero_image()
 
 // **RECUPERER LE CHAMPDE REFERENCE**
 
-function get_reference()
-{
-    // Récupérer la valeur du champ SCF
-    $reference = get_post_meta(get_the_ID(), 'reference', true);
+// function get_reference()
+// {
+//     // Récupérer la valeur du champ SCF
+//     $reference = get_post_meta(get_the_ID(), 'reference', true);
 
-    // Retourner la valeur récupérée
-    return $reference;
-}
-add_shortcode('get_reference', 'get_reference');
+//     // Retourner la valeur récupérée
+//     return $reference;
+// }
+// add_shortcode('get_reference', 'get_reference');
 
 // ****FILTRE****
 
@@ -247,7 +247,9 @@ function load_more_posts()
             'terms'    => $format,
         );
     }
-
+    if (!empty($args['tax_query'])) {
+        $args['tax_query']['relation'] = 'AND';
+    }
     if ($dateSort !== 'ALL') {
         $args['orderby'] = 'date';
         $args['order'] = ($dateSort === 'ASC') ? 'ASC' : 'DESC';
